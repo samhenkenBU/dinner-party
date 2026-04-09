@@ -2,7 +2,7 @@ import { useState, useMemo } from "react";
 import { useApp } from "@/context/AppContext";
 import Avatar from "@/components/Avatar";
 import RestrictionTag from "@/components/RestrictionTag";
-import { ArrowLeft, Send, Search } from "lucide-react";
+import { ArrowLeft, Send, Search, ChefHat, Check, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { motion, AnimatePresence } from "framer-motion";
 import { checkDishSafety, getSafeAlternatives, DishSafetyResult } from "@/lib/dishSafety";
@@ -14,6 +14,9 @@ const EventDetailScreen = ({ eventId, onBack }: { eventId: string; onBack: () =>
   const [dishInput, setDishInput] = useState("");
   const [result, setResult] = useState<DishSafetyResult | null>(null);
   const [alternatives, setAlternatives] = useState<string[]>([]);
+  const [confirmedDish, setConfirmedDish] = useState<string | null>(null);
+  const [isConfirming, setIsConfirming] = useState(false);
+  const [confirmInput, setConfirmInput] = useState("");
 
   const restrictionSummary = useMemo(() => {
     if (!event) return {};
@@ -38,7 +41,17 @@ const EventDetailScreen = ({ eventId, onBack }: { eventId: string; onBack: () =>
     }
   };
 
+  const handleConfirmDish = () => {
+    if (!confirmInput.trim()) return;
+    setConfirmedDish(confirmInput.trim());
+    setIsConfirming(false);
+    setConfirmInput("");
+    toast({ title: "Dish confirmed!", description: `You're bringing "${confirmInput.trim()}"` });
+  };
+
   if (!event) return null;
+
+  const isPotluck = !!event.isPotluck;
 
   const badgeColors: Record<string, string> = {
     green: "bg-safe text-primary-foreground",
@@ -54,7 +67,14 @@ const EventDetailScreen = ({ eventId, onBack }: { eventId: string; onBack: () =>
         <ArrowLeft className="h-4 w-4" /> Back
       </button>
 
-      <h1 className="font-display text-2xl font-bold text-foreground">{event.name}</h1>
+      <div className="flex items-center gap-2">
+        <h1 className="font-display text-2xl font-bold text-foreground">{event.name}</h1>
+        {isPotluck && (
+          <span className="px-2 py-0.5 rounded-full bg-primary/15 text-primary text-xs font-body font-medium flex items-center gap-1">
+            <ChefHat className="h-3 w-3" /> Potluck
+          </span>
+        )}
+      </div>
       <p className="font-body text-sm text-muted-foreground mt-1">{new Date(event.date).toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" })}</p>
       <p className="font-body text-sm text-muted-foreground">{event.location} · Hosted by {event.hostName}</p>
 
@@ -81,53 +101,113 @@ const EventDetailScreen = ({ eventId, onBack }: { eventId: string; onBack: () =>
         ))}
       </div>
 
-      {/* Dish Checker */}
-      <h2 className="font-display text-lg font-bold text-foreground mt-6 mb-3">Dish Safety Checker</h2>
-      <div className="flex gap-2">
-        <input
-          value={dishInput}
-          onChange={(e) => { setDishInput(e.target.value); setResult(null); }}
-          onKeyDown={(e) => e.key === "Enter" && handleCheck()}
-          placeholder="What dish are you bringing?"
-          className="flex-1 rounded-lg border border-border bg-primary-foreground px-3 py-2.5 font-body text-sm"
-        />
-        <button onClick={handleCheck} className="rounded-lg bg-primary text-primary-foreground p-2.5 active:scale-95 transition-transform">
-          <Search className="h-5 w-5" />
-        </button>
-      </div>
-
-      <AnimatePresence>
-        {result && (
-          <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="mt-4 rounded-2xl bg-primary-foreground shadow-warm p-4">
-            <div className="flex items-center gap-2">
-              <span className="text-lg">{badgeEmoji[result.rating]}</span>
-              <span className={`px-3 py-1 rounded-full text-sm font-body font-medium ${badgeColors[result.rating]}`}>
-                {result.rating === "unknown" ? "Unknown Dish" : result.matchedDish}
-              </span>
-            </div>
-            <p className="font-body text-sm text-foreground mt-2">{result.message}</p>
-            {result.flaggedAllergens.length > 0 && (
-              <p className="font-body text-xs text-muted-foreground mt-1">Contains: {result.flaggedAllergens.join(", ")}</p>
-            )}
-            {alternatives.length > 0 && (
-              <div className="mt-3">
-                <p className="font-body text-xs font-medium text-foreground mb-1.5">Safe alternatives:</p>
-                <div className="flex flex-wrap gap-1.5">
-                  {alternatives.map((d) => (
-                    <button
-                      key={d}
-                      onClick={() => { setDishInput(d); setResult(null); }}
-                      className="px-2.5 py-1 rounded-full bg-safe/20 text-safe text-xs font-body font-medium active:scale-95 transition-transform"
-                    >
-                      {d}
-                    </button>
-                  ))}
+      {/* Potluck Section */}
+      {isPotluck && (
+        <>
+          {/* Your Confirmed Dish */}
+          <h2 className="font-display text-lg font-bold text-foreground mt-6 mb-3">Your Dish</h2>
+          {confirmedDish ? (
+            <div className="bg-primary-foreground rounded-xl shadow-warm p-4 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-full bg-safe/20 flex items-center justify-center">
+                  <Check className="h-5 w-5 text-safe" />
+                </div>
+                <div>
+                  <p className="font-body font-medium text-sm text-foreground">{confirmedDish}</p>
+                  <p className="font-body text-xs text-muted-foreground">You're bringing this!</p>
                 </div>
               </div>
+              <button
+                onClick={() => { setConfirmedDish(null); setIsConfirming(true); setConfirmInput(""); }}
+                className="text-xs font-body text-muted-foreground underline active:scale-95 transition-transform"
+              >
+                Change
+              </button>
+            </div>
+          ) : isConfirming ? (
+            <div className="bg-primary-foreground rounded-xl shadow-warm p-4 space-y-3">
+              <input
+                value={confirmInput}
+                onChange={(e) => setConfirmInput(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleConfirmDish()}
+                placeholder="What are you bringing?"
+                className="w-full rounded-lg border border-border bg-background px-3 py-2.5 font-body text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
+                autoFocus
+              />
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setIsConfirming(false)}
+                  className="flex-1 rounded-lg border border-border px-3 py-2 text-sm font-body font-medium active:scale-95 transition-transform"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleConfirmDish}
+                  className="flex-1 rounded-lg bg-teal text-primary-foreground px-3 py-2 text-sm font-body font-medium active:scale-95 transition-transform"
+                >
+                  Confirm Dish
+                </button>
+              </div>
+            </div>
+          ) : (
+            <button
+              onClick={() => setIsConfirming(true)}
+              className="w-full rounded-xl border-2 border-dashed border-border py-4 flex flex-col items-center gap-1.5 text-muted-foreground hover:border-primary/40 transition-colors active:scale-[0.98]"
+            >
+              <ChefHat className="h-5 w-5" />
+              <span className="font-body text-sm font-medium">Confirm what you're bringing</span>
+            </button>
+          )}
+
+          {/* Dish Safety Checker */}
+          <h2 className="font-display text-lg font-bold text-foreground mt-6 mb-3">Dish Safety Checker</h2>
+          <div className="flex gap-2">
+            <input
+              value={dishInput}
+              onChange={(e) => { setDishInput(e.target.value); setResult(null); }}
+              onKeyDown={(e) => e.key === "Enter" && handleCheck()}
+              placeholder="Check if a dish is safe..."
+              className="flex-1 rounded-lg border border-border bg-primary-foreground px-3 py-2.5 font-body text-sm"
+            />
+            <button onClick={handleCheck} className="rounded-lg bg-primary text-primary-foreground p-2.5 active:scale-95 transition-transform">
+              <Search className="h-5 w-5" />
+            </button>
+          </div>
+
+          <AnimatePresence>
+            {result && (
+              <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="mt-4 rounded-2xl bg-primary-foreground shadow-warm p-4">
+                <div className="flex items-center gap-2">
+                  <span className="text-lg">{badgeEmoji[result.rating]}</span>
+                  <span className={`px-3 py-1 rounded-full text-sm font-body font-medium ${badgeColors[result.rating]}`}>
+                    {result.rating === "unknown" ? "Unknown Dish" : result.matchedDish}
+                  </span>
+                </div>
+                <p className="font-body text-sm text-foreground mt-2">{result.message}</p>
+                {result.flaggedAllergens.length > 0 && (
+                  <p className="font-body text-xs text-muted-foreground mt-1">Contains: {result.flaggedAllergens.join(", ")}</p>
+                )}
+                {alternatives.length > 0 && (
+                  <div className="mt-3">
+                    <p className="font-body text-xs font-medium text-foreground mb-1.5">Safe alternatives:</p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {alternatives.map((d) => (
+                        <button
+                          key={d}
+                          onClick={() => { setDishInput(d); setResult(null); }}
+                          className="px-2.5 py-1 rounded-full bg-safe/20 text-safe text-xs font-body font-medium active:scale-95 transition-transform"
+                        >
+                          {d}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </motion.div>
             )}
-          </motion.div>
-        )}
-      </AnimatePresence>
+          </AnimatePresence>
+        </>
+      )}
 
       {/* Invite */}
       <button

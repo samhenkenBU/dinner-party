@@ -66,6 +66,7 @@ const defaultEvents: AppEvent[] = [
     date: "2026-06-15",
     location: "Central Park Pavilion",
     hostName: "Alex Chen",
+    isPotluck: true,
     guests: [
       { id: "g1", name: "Alex Chen", restrictions: ["Gluten", "Tree Nuts"] },
       { id: "g2", name: "Jordan Lee", restrictions: ["Dairy", "Soy"] },
@@ -79,6 +80,7 @@ const defaultEvents: AppEvent[] = [
     date: "2026-12-18",
     location: "The Rustic Table Restaurant",
     hostName: "Jordan Lee",
+    isPotluck: false,
     guests: [
       { id: "g5", name: "Jordan Lee", restrictions: ["Dairy", "Soy"] },
       { id: "g6", name: "Alex Chen", restrictions: ["Gluten", "Tree Nuts"] },
