@@ -69,10 +69,10 @@ const defaultEvents: AppEvent[] = [
     hostName: "Alex Chen",
     isPotluck: true,
     guests: [
-      { id: "g1", name: "Alex Chen", restrictions: ["Gluten", "Tree Nuts"] },
-      { id: "g2", name: "Jordan Lee", restrictions: ["Dairy", "Soy"] },
+      { id: "g1", name: "Alex Chen", restrictions: ["Gluten", "Tree Nuts"], confirmedDish: "Fruit Salad" },
+      { id: "g2", name: "Jordan Lee", restrictions: ["Dairy", "Soy"], confirmedDish: "Guacamole" },
       { id: "g3", name: "Sam Rivera", restrictions: ["Peanuts", "Shellfish", "Eggs"] },
-      { id: "g4", name: "Taylor Kim", restrictions: ["Gluten", "Dairy", "Sesame"] },
+      { id: "g4", name: "Taylor Kim", restrictions: ["Gluten", "Dairy", "Sesame"], confirmedDish: "Grilled Chicken" },
     ],
   },
   {
