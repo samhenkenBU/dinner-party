@@ -5,24 +5,15 @@ import RestrictionTag from "@/components/RestrictionTag";
 import { ArrowLeft, Send, Search } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { motion, AnimatePresence } from "framer-motion";
-
-const DISH_MAP: Record<string, string[]> = {
-  "pasta salad": ["gluten", "dairy"],
-  "caesar salad": ["dairy", "eggs", "fish"],
-  "chocolate cake": ["gluten", "dairy", "eggs", "tree nuts"],
-  "fruit salad": [],
-  "hummus & veggies": ["sesame"],
-  "hummus and veggies": ["sesame"],
-};
-
-const SAFE_DISHES = ["Fruit Salad", "Grilled Vegetables", "Rice & Beans"];
+import { checkDishSafety, getSafeAlternatives, DishSafetyResult } from "@/lib/dishSafety";
 
 const EventDetailScreen = ({ eventId, onBack }: { eventId: string; onBack: () => void }) => {
   const { events } = useApp();
   const { toast } = useToast();
   const event = events.find((e) => e.id === eventId);
   const [dishInput, setDishInput] = useState("");
-  const [checkedDish, setCheckedDish] = useState<string | null>(null);
+  const [result, setResult] = useState<DishSafetyResult | null>(null);
+  const [alternatives, setAlternatives] = useState<string[]>([]);
 
   const restrictionSummary = useMemo(() => {
     if (!event) return {};
@@ -31,36 +22,31 @@ const EventDetailScreen = ({ eventId, onBack }: { eventId: string; onBack: () =>
     return counts;
   }, [event]);
 
-  const checkDish = () => {
+  const guestRestrictions = useMemo(() => {
+    if (!event) return [];
+    return event.guests.map((g) => g.restrictions.map((r) => r.toLowerCase()));
+  }, [event]);
+
+  const handleCheck = () => {
     if (!dishInput.trim()) return;
-    setCheckedDish(dishInput.trim());
-  };
-
-  const getDishResult = () => {
-    if (!checkedDish || !event) return null;
-    const key = checkedDish.toLowerCase();
-    const ingredients = DISH_MAP[key];
-
-    if (ingredients === undefined) {
-      return { level: "unknown" as const, label: "Unknown Dish", overlaps: [] as string[], affectedCount: 0 };
+    const res = checkDishSafety(dishInput.trim(), guestRestrictions);
+    setResult(res);
+    if (res.rating === "red" || res.rating === "yellow") {
+      setAlternatives(getSafeAlternatives(guestRestrictions, res.matchedDish || undefined));
+    } else {
+      setAlternatives([]);
     }
-
-    const guestRestrictions = event.guests.flatMap((g) => g.restrictions.map((r) => r.toLowerCase()));
-    const overlaps = ingredients.filter((i) => guestRestrictions.includes(i));
-    const affectedGuests = event.guests.filter((g) => g.restrictions.some((r) => ingredients.includes(r.toLowerCase())));
-    const count = affectedGuests.length;
-
-    if (count === 0) return { level: "safe" as const, label: "Safe for all guests!", overlaps, affectedCount: 0 };
-    if (count === 1) return { level: "caution" as const, label: `Conflicts with 1 guest's restrictions`, overlaps, affectedCount: 1 };
-    return { level: "danger" as const, label: `Conflicts with ${count} guests' restrictions`, overlaps, affectedCount: count };
   };
-
-  const result = getDishResult();
 
   if (!event) return null;
 
-  const badgeColors = { safe: "bg-safe text-primary-foreground", caution: "bg-caution text-foreground", danger: "bg-danger text-primary-foreground", unknown: "bg-muted text-muted-foreground" };
-  const badgeEmoji = { safe: "🟢", caution: "🟡", danger: "🔴", unknown: "🟡" };
+  const badgeColors: Record<string, string> = {
+    green: "bg-safe text-primary-foreground",
+    yellow: "bg-caution text-foreground",
+    red: "bg-danger text-primary-foreground",
+    unknown: "bg-muted text-muted-foreground",
+  };
+  const badgeEmoji: Record<string, string> = { green: "🟢", yellow: "🟡", red: "🔴", unknown: "🟡" };
 
   return (
     <div className="px-4 pt-4 pb-24">
@@ -100,12 +86,12 @@ const EventDetailScreen = ({ eventId, onBack }: { eventId: string; onBack: () =>
       <div className="flex gap-2">
         <input
           value={dishInput}
-          onChange={(e) => { setDishInput(e.target.value); setCheckedDish(null); }}
-          onKeyDown={(e) => e.key === "Enter" && checkDish()}
+          onChange={(e) => { setDishInput(e.target.value); setResult(null); }}
+          onKeyDown={(e) => e.key === "Enter" && handleCheck()}
           placeholder="What dish are you bringing?"
           className="flex-1 rounded-lg border border-border bg-primary-foreground px-3 py-2.5 font-body text-sm"
         />
-        <button onClick={checkDish} className="rounded-lg bg-primary text-primary-foreground p-2.5 active:scale-95 transition-transform">
+        <button onClick={handleCheck} className="rounded-lg bg-primary text-primary-foreground p-2.5 active:scale-95 transition-transform">
           <Search className="h-5 w-5" />
         </button>
       </div>
@@ -114,20 +100,27 @@ const EventDetailScreen = ({ eventId, onBack }: { eventId: string; onBack: () =>
         {result && (
           <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="mt-4 rounded-2xl bg-primary-foreground shadow-warm p-4">
             <div className="flex items-center gap-2">
-              <span className="text-lg">{badgeEmoji[result.level]}</span>
-              <span className={`px-3 py-1 rounded-full text-sm font-body font-medium ${badgeColors[result.level]}`}>
-                {result.label}
+              <span className="text-lg">{badgeEmoji[result.rating]}</span>
+              <span className={`px-3 py-1 rounded-full text-sm font-body font-medium ${badgeColors[result.rating]}`}>
+                {result.rating === "unknown" ? "Unknown Dish" : result.matchedDish}
               </span>
             </div>
-            {result.overlaps.length > 0 && (
-              <p className="font-body text-xs text-muted-foreground mt-2">Contains: {result.overlaps.join(", ")}</p>
+            <p className="font-body text-sm text-foreground mt-2">{result.message}</p>
+            {result.flaggedAllergens.length > 0 && (
+              <p className="font-body text-xs text-muted-foreground mt-1">Contains: {result.flaggedAllergens.join(", ")}</p>
             )}
-            {(result.level === "caution" || result.level === "danger") && (
+            {alternatives.length > 0 && (
               <div className="mt-3">
                 <p className="font-body text-xs font-medium text-foreground mb-1.5">Safe alternatives:</p>
                 <div className="flex flex-wrap gap-1.5">
-                  {SAFE_DISHES.map((d) => (
-                    <span key={d} className="px-2.5 py-1 rounded-full bg-safe/20 text-safe text-xs font-body font-medium">{d}</span>
+                  {alternatives.map((d) => (
+                    <button
+                      key={d}
+                      onClick={() => { setDishInput(d); setResult(null); }}
+                      className="px-2.5 py-1 rounded-full bg-safe/20 text-safe text-xs font-body font-medium active:scale-95 transition-transform"
+                    >
+                      {d}
+                    </button>
                   ))}
                 </div>
               </div>
