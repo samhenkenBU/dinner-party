@@ -93,7 +93,7 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<UserProfile>(defaultUser);
   const [friends, setFriends] = useState<Friend[]>(defaultFriends);
   const [events, setEvents] = useState<AppEvent[]>(defaultEvents);
-  const [hasOnboarded, setHasOnboarded] = useState(true);
+  const [hasOnboarded, setHasOnboarded] = useState(false);
 
   return (
     <AppContext.Provider value={{ user, setUser, friends, setFriends, events, setEvents, hasOnboarded, setHasOnboarded }}>
