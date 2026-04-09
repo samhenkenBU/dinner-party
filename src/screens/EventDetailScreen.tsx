@@ -46,12 +46,12 @@ const EventDetailScreen = ({ eventId, onBack }: { eventId: string; onBack: () =>
     }
   };
 
-  const handleConfirmDish = () => {
-    if (!confirmInput.trim()) return;
-    setConfirmedDish(confirmInput.trim());
-    setIsConfirming(false);
-    setConfirmInput("");
-    toast({ title: "Dish confirmed!", description: `You're bringing "${confirmInput.trim()}"` });
+  const handleAddDish = (name: string) => {
+    setConfirmedDish(name);
+    setDishInput("");
+    setResult(null);
+    setAlternatives([]);
+    toast({ title: "Dish confirmed!", description: `You're bringing "${name}"` });
   };
 
   if (!event) return null;
