@@ -107,6 +107,14 @@ const EventsScreen = ({ onSelectEvent }: { onSelectEvent: (id: string) => void }
         </button>
       </div>
 
+      <div className="mb-4 rounded-2xl border border-primary/20 bg-primary/5 p-4">
+        <p className="font-body text-sm font-medium text-foreground">Try the sample events.</p>
+        <p className="mt-1 font-body text-xs text-muted-foreground">
+          <span className="text-foreground">Summer Potluck Demo</span> shows dish confirmation and the safety checker.
+          <span className="block mt-1"><span className="text-foreground">Restaurant Dinner Demo</span> keeps those tools off.</span>
+        </p>
+      </div>
+
       {/* Create Event Dialog */}
       <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) setForm(defaultForm); }}>
         <DialogContent className="max-w-[400px] rounded-2xl bg-card p-0 gap-0 max-h-[85vh] overflow-y-auto">
@@ -266,10 +274,25 @@ const EventsScreen = ({ onSelectEvent }: { onSelectEvent: (id: string) => void }
                   </span>
                 )}
               </div>
+              {e.description && (
+                <p className="mt-2 font-body text-sm text-muted-foreground">{e.description}</p>
+              )}
               <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground font-body">
                 <span className="flex items-center gap-1"><CalendarDays className="h-3.5 w-3.5" />{new Date(e.date).toLocaleDateString()}</span>
                 <span className="flex items-center gap-1"><MapPin className="h-3.5 w-3.5" />{e.location}</span>
                 <span className="flex items-center gap-1"><Users className="h-3.5 w-3.5" />{e.guests.length}</span>
+              </div>
+              <div className="mt-3 flex flex-wrap gap-2">
+                <span
+                  className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-body font-medium ${
+                    e.isPotluck
+                      ? "bg-primary/10 text-primary"
+                      : "bg-muted text-muted-foreground"
+                  }`}
+                >
+                  <ChefHat className="h-3 w-3" />
+                  {e.isPotluck ? "Dish tools enabled" : "Dish tools disabled"}
+                </span>
               </div>
               <div className="flex flex-wrap gap-1.5 mt-3">
                 {Object.entries(rc).map(([r, c]) => (
