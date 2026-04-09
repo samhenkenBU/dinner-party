@@ -2,10 +2,16 @@ import { useState, useMemo } from "react";
 import { useApp } from "@/context/AppContext";
 import Avatar from "@/components/Avatar";
 import RestrictionTag from "@/components/RestrictionTag";
-import { ArrowLeft, Send, Search, ChefHat, Check, X } from "lucide-react";
+import { ArrowLeft, Send, Search, ChefHat, Check, X as XIcon } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { motion, AnimatePresence } from "framer-motion";
 import { checkDishSafety, getSafeAlternatives, DishSafetyResult } from "@/lib/dishSafety";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 const EventDetailScreen = ({ eventId, onBack }: { eventId: string; onBack: () => void }) => {
   const { events } = useApp();
@@ -17,6 +23,7 @@ const EventDetailScreen = ({ eventId, onBack }: { eventId: string; onBack: () =>
   const [confirmedDish, setConfirmedDish] = useState<string | null>(null);
   const [isConfirming, setIsConfirming] = useState(false);
   const [confirmInput, setConfirmInput] = useState("");
+  const [selectedGuest, setSelectedGuest] = useState<typeof event.guests[number] | null>(null);
 
   const restrictionSummary = useMemo(() => {
     if (!event) return {};
@@ -88,19 +95,42 @@ const EventDetailScreen = ({ eventId, onBack }: { eventId: string; onBack: () =>
 
       {/* Guests */}
       <h2 className="font-display text-lg font-bold text-foreground mt-6 mb-3">Guests ({event.guests.length})</h2>
-      <div className="space-y-2">
+      <div className="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4 scrollbar-hide">
         {event.guests.map((g) => (
-          <div key={g.id} className="bg-primary-foreground rounded-xl shadow-warm p-3 flex items-center gap-3">
-            <Avatar name={g.name} size={36} />
-            <div className="flex-1 min-w-0">
-              <p className="font-body font-medium text-sm text-foreground">{g.name}</p>
-              <div className="flex flex-wrap gap-1 mt-1">
-                {g.restrictions.map((r) => <RestrictionTag key={r} label={r} size="sm" />)}
-              </div>
-            </div>
-          </div>
+          <button
+            key={g.id}
+            onClick={() => setSelectedGuest(g)}
+            className="flex flex-col items-center gap-1.5 min-w-[64px] active:scale-95 transition-transform"
+          >
+            <Avatar name={g.name} size={48} />
+            <span className="font-body text-xs text-foreground text-center leading-tight w-16 truncate">{g.name.split(" ")[0]}</span>
+          </button>
         ))}
       </div>
+
+      {/* Guest Profile Dialog */}
+      <Dialog open={!!selectedGuest} onOpenChange={(open) => !open && setSelectedGuest(null)}>
+        <DialogContent className="max-w-[340px] rounded-2xl bg-card p-0 gap-0">
+          <DialogHeader className="p-5 pb-3">
+            <DialogTitle className="font-display text-xl text-foreground">Guest Profile</DialogTitle>
+          </DialogHeader>
+          {selectedGuest && (
+            <div className="px-5 pb-5 flex flex-col items-center gap-4">
+              <Avatar name={selectedGuest.name} size={72} />
+              <p className="font-display text-lg font-bold text-foreground">{selectedGuest.name}</p>
+              {selectedGuest.restrictions.length > 0 ? (
+                <div className="flex flex-wrap justify-center gap-1.5">
+                  {selectedGuest.restrictions.map((r) => (
+                    <RestrictionTag key={r} label={r} size="sm" />
+                  ))}
+                </div>
+              ) : (
+                <p className="font-body text-sm text-muted-foreground">No dietary restrictions</p>
+              )}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
 
       {/* Potluck Section */}
       {isPotluck && (
