@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dialog";
 
 const EventDetailScreen = ({ eventId, onBack }: { eventId: string; onBack: () => void }) => {
-  const { events } = useApp();
+  const { events, setEvents, user } = useApp();
   const { toast } = useToast();
   const event = events.find((e) => e.id === eventId);
   const [dishInput, setDishInput] = useState("");
@@ -48,6 +48,13 @@ const EventDetailScreen = ({ eventId, onBack }: { eventId: string; onBack: () =>
 
   const handleAddDish = (name: string) => {
     setConfirmedDish(name);
+    setEvents((prev) =>
+      prev.map((e) =>
+        e.id === eventId
+          ? { ...e, dishes: [...(e.dishes || []), { id: `d-${Date.now()}`, guestName: user.name, dishName: name }] }
+          : e
+      )
+    );
     setDishInput("");
     setResult(null);
     setAlternatives([]);
