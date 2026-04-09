@@ -216,7 +216,7 @@ const EventsScreen = ({ onSelectEvent }: { onSelectEvent: (id: string) => void }
                         : "border-border bg-background hover:border-muted-foreground/30"
                     }`}
                   >
-                    <Avatar name={f.name} size="sm" />
+                    <Avatar name={f.name} size={32} />
                     <span className="font-body text-sm text-foreground flex-1">{f.name}</span>
                     {form.coHosts.includes(f.id) && (
                       <span className="text-xs font-body font-medium text-teal">Co-host</span>
