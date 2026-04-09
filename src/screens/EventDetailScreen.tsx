@@ -135,6 +135,26 @@ const EventDetailScreen = ({ eventId, onBack }: { eventId: string; onBack: () =>
       {/* Potluck Section */}
       {isPotluck && (
         <>
+          {/* What's Being Brought */}
+          {event.dishes && event.dishes.length > 0 && (
+            <>
+              <h2 className="font-display text-lg font-bold text-foreground mt-6 mb-3">
+                What's Being Brought ({event.dishes.length})
+              </h2>
+              <div className="space-y-2">
+                {event.dishes.map((d) => (
+                  <div key={d.id} className="bg-primary-foreground rounded-xl shadow-warm p-3 flex items-center gap-3">
+                    <Avatar name={d.guestName} size={36} />
+                    <div className="flex-1 min-w-0">
+                      <p className="font-body font-medium text-sm text-foreground">{d.dishName}</p>
+                      <p className="font-body text-xs text-muted-foreground">{d.guestName}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+
           {/* Your Confirmed Dish */}
           <h2 className="font-display text-lg font-bold text-foreground mt-6 mb-3">Your Dish</h2>
           {confirmedDish ? (

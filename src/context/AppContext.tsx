@@ -14,6 +14,12 @@ export interface EventGuest {
   restrictions: string[];
 }
 
+export interface EventDish {
+  id: string;
+  guestName: string;
+  dishName: string;
+}
+
 export interface AppEvent {
   id: string;
   name: string;
@@ -25,6 +31,7 @@ export interface AppEvent {
   isPotluck?: boolean;
   coHosts?: string[];
   guests: EventGuest[];
+  dishes?: EventDish[];
 }
 
 export interface Friend {
@@ -57,6 +64,11 @@ const defaultFriends: Friend[] = [
   { id: "f1", name: "Jordan Lee", email: "jordan@email.com", restrictions: ["Dairy", "Soy"] },
   { id: "f2", name: "Sam Rivera", email: "sam@email.com", restrictions: ["Peanuts", "Shellfish", "Eggs"] },
   { id: "f3", name: "Taylor Kim", email: "taylor@email.com", restrictions: ["Gluten", "Dairy", "Sesame"] },
+  { id: "f4", name: "Morgan Patel", email: "morgan@email.com", restrictions: ["Eggs"] },
+  { id: "f5", name: "Riley Nguyen", email: "riley@email.com", restrictions: ["Soy", "Fish"] },
+  { id: "f6", name: "Casey Brooks", email: "casey@email.com", restrictions: [] },
+  { id: "f7", name: "Avery Tanaka", email: "avery@email.com", restrictions: ["Dairy", "Tree Nuts"] },
+  { id: "f8", name: "Jamie Okafor", email: "jamie@email.com", restrictions: ["Wheat", "Sesame"] },
 ];
 
 const defaultEvents: AppEvent[] = [
@@ -73,6 +85,11 @@ const defaultEvents: AppEvent[] = [
       { id: "g2", name: "Jordan Lee", restrictions: ["Dairy", "Soy"] },
       { id: "g3", name: "Sam Rivera", restrictions: ["Peanuts", "Shellfish", "Eggs"] },
       { id: "g4", name: "Taylor Kim", restrictions: ["Gluten", "Dairy", "Sesame"] },
+    ],
+    dishes: [
+      { id: "d1", guestName: "Jordan Lee", dishName: "Guacamole" },
+      { id: "d2", guestName: "Sam Rivera", dishName: "Grilled Chicken" },
+      { id: "d3", guestName: "Taylor Kim", dishName: "Fruit Salad" },
     ],
   },
   {
