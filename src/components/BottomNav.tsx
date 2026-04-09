@@ -1,10 +1,9 @@
-import { UtensilsCrossed, Users, CalendarDays, Sparkles } from "lucide-react";
+import { UtensilsCrossed, CalendarDays, Sparkles } from "lucide-react";
 
-type Tab = "profile" | "friends" | "events" | "discover";
+type Tab = "profile" | "events" | "discover";
 
 const tabs: { id: Tab; label: string; icon: React.ElementType }[] = [
   { id: "profile", label: "Profile", icon: UtensilsCrossed },
-  { id: "friends", label: "Friends", icon: Users },
   { id: "events", label: "Events", icon: CalendarDays },
   { id: "discover", label: "Discover", icon: Sparkles },
 ];

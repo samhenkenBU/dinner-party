@@ -2,7 +2,7 @@ import { useState, useCallback } from "react";
 import { AppProvider } from "@/context/AppContext";
 import SplashScreen from "@/screens/SplashScreen";
 import ProfileScreen from "@/screens/ProfileScreen";
-import FriendsScreen from "@/screens/FriendsScreen";
+
 import EventsScreen from "@/screens/EventsScreen";
 import EventDetailScreen from "@/screens/EventDetailScreen";
 import DiscoverScreen from "@/screens/DiscoverScreen";
