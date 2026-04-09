@@ -3,19 +3,27 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useApp } from "@/context/AppContext";
 import Avatar from "@/components/Avatar";
 import RestrictionTag from "@/components/RestrictionTag";
-import { Share2, Pencil, X } from "lucide-react";
+import { Share2, Pencil, X, ChevronDown, ChevronUp } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import logo from "@/assets/dinner-party-logo.png";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 const PREDEFINED = ["Peanuts", "Tree Nuts", "Dairy", "Gluten", "Shellfish", "Soy", "Eggs", "Wheat", "Fish", "Sesame"];
 
 const ProfileScreen = () => {
-  const { user, setUser } = useApp();
+  const { user, setUser, friends } = useApp();
   const { toast } = useToast();
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(user);
   const [tagInput, setTagInput] = useState("");
   const [showCard, setShowCard] = useState(false);
+  const [friendsExpanded, setFriendsExpanded] = useState(false);
+  const [selectedFriend, setSelectedFriend] = useState<typeof friends[number] | null>(null);
 
   const suggestions = tagInput.length >= 2
     ? PREDEFINED.filter((r) => r.toLowerCase().includes(tagInput.toLowerCase()) && !draft.restrictions.includes(r))
@@ -116,6 +124,66 @@ const ProfileScreen = () => {
           )}
         </div>
       </div>
+
+      {/* Friends Section */}
+      <button
+        onClick={() => setFriendsExpanded(!friendsExpanded)}
+        className="mt-6 w-full flex items-center justify-between px-1 active:scale-[0.98] transition-transform"
+      >
+        <h2 className="font-display text-lg font-bold text-foreground">Friends ({friends.length})</h2>
+        {friendsExpanded ? <ChevronUp className="h-5 w-5 text-muted-foreground" /> : <ChevronDown className="h-5 w-5 text-muted-foreground" />}
+      </button>
+
+      <AnimatePresence>
+        {friendsExpanded && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            className="overflow-hidden"
+          >
+            <div className="flex gap-3 overflow-x-auto pb-2 pt-3 -mx-4 px-4 scrollbar-hide">
+              {friends.map((f) => (
+                <button
+                  key={f.id}
+                  onClick={() => setSelectedFriend(f)}
+                  className="flex flex-col items-center gap-1.5 min-w-[64px] active:scale-95 transition-transform"
+                >
+                  <Avatar name={f.name} size={48} />
+                  <span className="font-body text-xs text-foreground text-center leading-tight w-16 truncate">{f.name.split(" ")[0]}</span>
+                </button>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Friend Profile Dialog */}
+      <Dialog open={!!selectedFriend} onOpenChange={(open) => !open && setSelectedFriend(null)}>
+        <DialogContent className="max-w-[340px] rounded-2xl bg-card p-0 gap-0">
+          <DialogHeader className="p-5 pb-3">
+            <DialogTitle className="font-display text-xl text-foreground">Friend Profile</DialogTitle>
+          </DialogHeader>
+          {selectedFriend && (
+            <div className="px-5 pb-5 flex flex-col items-center gap-4">
+              <Avatar name={selectedFriend.name} size={72} />
+              <div className="text-center">
+                <p className="font-display text-lg font-bold text-foreground">{selectedFriend.name}</p>
+                <p className="font-body text-xs text-muted-foreground">{selectedFriend.email}</p>
+              </div>
+              {selectedFriend.restrictions.length > 0 ? (
+                <div className="flex flex-wrap justify-center gap-1.5">
+                  {selectedFriend.restrictions.map((r) => (
+                    <RestrictionTag key={r} label={r} size="sm" />
+                  ))}
+                </div>
+              ) : (
+                <p className="font-body text-sm text-muted-foreground">No dietary restrictions</p>
+              )}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
 
       {/* Share Card Modal */}
       <AnimatePresence>
