@@ -12,6 +12,7 @@ export interface EventGuest {
   id: string;
   name: string;
   restrictions: string[];
+  confirmedDish?: string;
 }
 
 export interface AppEvent {
