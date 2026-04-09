@@ -17,10 +17,13 @@ export interface EventGuest {
 export interface AppEvent {
   id: string;
   name: string;
+  description?: string;
   date: string;
   location: string;
   hostName: string;
   imageUrl?: string;
+  isPotluck?: boolean;
+  coHosts?: string[];
   guests: EventGuest[];
 }
 
