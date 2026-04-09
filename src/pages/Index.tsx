@@ -34,8 +34,8 @@ const AppShell = () => {
     <div className="min-h-screen bg-background flex justify-center">
       <div className="w-full max-w-[430px] min-h-screen bg-background relative">
         {/* Top nav */}
-        <div className="flex items-center justify-center px-4 py-3 border-b border-border bg-background sticky top-0 z-40">
-          <img src={logo} alt="Dinner Party" className="w-14 h-14 object-contain" />
+        <div className="flex items-center justify-start px-4 py-1 border-b border-border bg-background sticky top-0 z-40">
+          <img src={logo} alt="Dinner Party" className="w-20 h-20 -my-3 object-contain relative z-50" />
         </div>
         {renderScreen()}
         <BottomNav active={selectedEvent ? "events" : tab} onNavigate={(t) => { setSelectedEvent(null); setTab(t); }} />
