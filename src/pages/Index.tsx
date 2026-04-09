@@ -24,7 +24,6 @@ const AppShell = () => {
     }
     switch (tab) {
       case "profile": return <ProfileScreen />;
-      case "friends": return <FriendsScreen />;
       case "events": return <EventsScreen onSelectEvent={(id) => setSelectedEvent(id)} />;
       case "discover": return <DiscoverScreen />;
     }
