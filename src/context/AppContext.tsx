@@ -62,7 +62,8 @@ const defaultFriends: Friend[] = [
 const defaultEvents: AppEvent[] = [
   {
     id: "e1",
-    name: "Summer Potluck",
+    name: "Summer Potluck Demo",
+    description: "Potluck example — open this event to confirm a dish and use the safety checker.",
     date: "2026-06-15",
     location: "Central Park Pavilion",
     hostName: "Alex Chen",
@@ -76,7 +77,8 @@ const defaultEvents: AppEvent[] = [
   },
   {
     id: "e2",
-    name: "Office Holiday Dinner",
+    name: "Restaurant Dinner Demo",
+    description: "Non-potluck example — dish tools are intentionally hidden for this event.",
     date: "2026-12-18",
     location: "The Rustic Table Restaurant",
     hostName: "Jordan Lee",
