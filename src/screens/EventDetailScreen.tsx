@@ -153,6 +153,20 @@ const EventDetailScreen = ({ eventId, onBack }: { eventId: string; onBack: () =>
                       <p className="font-body font-medium text-sm text-foreground">{d.dishName}</p>
                       <p className="font-body text-xs text-muted-foreground">{d.guestName}</p>
                     </div>
+                    {d.guestName === user.name && (
+                      <button
+                        onClick={() => setEvents((prev) =>
+                          prev.map((e) =>
+                            e.id === eventId
+                              ? { ...e, dishes: (e.dishes || []).filter((dish) => dish.id !== d.id) }
+                              : e
+                          )
+                        )}
+                        className="p-1.5 rounded-full hover:bg-danger/10 text-muted-foreground hover:text-danger transition-colors active:scale-95"
+                      >
+                        <XIcon className="h-4 w-4" />
+                      </button>
+                    )}
                   </div>
                 ))}
               </div>
