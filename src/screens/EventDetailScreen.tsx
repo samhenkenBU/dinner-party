@@ -79,17 +79,6 @@ const EventDetailScreen = ({ eventId, onBack }: { eventId: string; onBack: () =>
       <p className="font-body text-sm text-muted-foreground">{event.location} · Hosted by {event.hostName}</p>
       {event.description && <p className="font-body text-sm text-foreground mt-3">{event.description}</p>}
 
-      <div className={`mt-4 rounded-2xl border p-3 ${isPotluck ? "border-primary/20 bg-primary/5" : "border-border bg-muted/30"}`}>
-        <p className="font-body text-sm font-medium text-foreground">
-          {isPotluck ? "Potluck tools are enabled for this event." : "This event is not marked as a potluck."}
-        </p>
-        <p className="font-body text-xs text-muted-foreground mt-1">
-          {isPotluck
-            ? "Scroll down to confirm what you're bringing and run the dish safety checker."
-            : "Dish confirmation and the safety checker stay hidden until an event is marked as a potluck."}
-        </p>
-      </div>
-
       {/* Restriction Summary */}
       <div className="mt-4 flex flex-wrap gap-1.5">
         {Object.entries(restrictionSummary).map(([r, c]) => (
