@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dialog";
 
 const EventDetailScreen = ({ eventId, onBack }: { eventId: string; onBack: () => void }) => {
-  const { events } = useApp();
+  const { events, setEvents, user } = useApp();
   const { toast } = useToast();
   const event = events.find((e) => e.id === eventId);
   const [dishInput, setDishInput] = useState("");
