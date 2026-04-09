@@ -20,7 +20,7 @@ const EventDetailScreen = ({ eventId, onBack }: { eventId: string; onBack: () =>
   const [dishInput, setDishInput] = useState("");
   const [result, setResult] = useState<DishSafetyResult | null>(null);
   const [alternatives, setAlternatives] = useState<string[]>([]);
-  const [confirmedDish, setConfirmedDish] = useState<string | null>(null);
+  
   const [selectedGuest, setSelectedGuest] = useState<typeof event.guests[number] | null>(null);
 
   const restrictionSummary = useMemo(() => {
