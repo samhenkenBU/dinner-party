@@ -110,8 +110,8 @@ const EventsScreen = ({ onSelectEvent }: { onSelectEvent: (id: string) => void }
       <div className="mb-4 rounded-2xl border border-primary/20 bg-primary/5 p-4">
         <p className="font-body text-sm font-medium text-foreground">Try the sample events.</p>
         <p className="mt-1 font-body text-xs text-muted-foreground">
-          <span className="text-foreground">Summer Potluck Demo</span> shows dish confirmation and the safety checker.
-          <span className="block mt-1"><span className="text-foreground">Restaurant Dinner Demo</span> keeps those tools off.</span>
+          <span className="text-foreground">Summer Potluck</span> shows dish confirmation and the safety checker.
+          <span className="block mt-1"><span className="text-foreground">Restaurant Dinner</span> keeps those tools off.</span>
         </p>
       </div>
 
