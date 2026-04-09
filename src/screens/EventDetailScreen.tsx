@@ -96,11 +96,6 @@ const EventDetailScreen = ({ eventId, onBack }: { eventId: string; onBack: () =>
               <div className="flex flex-wrap gap-1 mt-1">
                 {g.restrictions.map((r) => <RestrictionTag key={r} label={r} size="sm" />)}
               </div>
-              {isPotluck && g.confirmedDish && (
-                <p className="font-body text-xs text-teal mt-1.5 flex items-center gap-1">
-                  <ChefHat className="h-3 w-3" /> Bringing: {g.confirmedDish}
-                </p>
-              )}
             </div>
           </div>
         ))}
