@@ -47,7 +47,6 @@ const EventDetailScreen = ({ eventId, onBack }: { eventId: string; onBack: () =>
   };
 
   const handleAddDish = (name: string) => {
-    setConfirmedDish(name);
     setEvents((prev) =>
       prev.map((e) =>
         e.id === eventId
@@ -58,7 +57,7 @@ const EventDetailScreen = ({ eventId, onBack }: { eventId: string; onBack: () =>
     setDishInput("");
     setResult(null);
     setAlternatives([]);
-    toast({ title: "Dish confirmed!", description: `You're bringing "${name}"` });
+    toast({ title: "Dish added!", description: `You're bringing "${name}"` });
   };
 
   if (!event) return null;
