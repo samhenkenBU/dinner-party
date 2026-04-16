@@ -226,28 +226,88 @@ const EventsScreen = ({ onSelectEvent }: { onSelectEvent: (id: string) => void }
               )}
             </div>
 
-            {/* Co-hosts from Friends */}
+            {/* Invite Guests */}
             <div>
-              <label className="font-body text-xs font-medium text-muted-foreground mb-1.5 block">Co-hosts</label>
-              <div className="space-y-2">
-                {friends.map((f) => (
-                  <button
-                    key={f.id}
-                    onClick={() => toggleCoHost(f.id)}
-                    className={`w-full flex items-center gap-3 rounded-lg px-3 py-2.5 border transition-colors text-left ${
-                      form.coHosts.includes(f.id)
-                        ? "border-teal bg-teal/10"
-                        : "border-border bg-background hover:border-muted-foreground/30"
-                    }`}
-                  >
-                    <Avatar name={f.name} size={32} />
-                    <span className="font-body text-sm text-foreground flex-1">{f.name}</span>
-                    {form.coHosts.includes(f.id) && (
-                      <span className="text-xs font-body font-medium text-teal">Co-host</span>
-                    )}
-                  </button>
-                ))}
-              </div>
+              <button
+                type="button"
+                onClick={() => setInviteOpen((v) => !v)}
+                className="w-full flex items-center justify-between rounded-lg border border-border bg-background px-3 py-2.5 hover:border-muted-foreground/30 transition-colors"
+              >
+                <span className="flex items-center gap-2 font-body text-sm text-foreground">
+                  <UserPlus className="h-4 w-4 text-primary" />
+                  Invite Guests
+                  {form.invitees.length > 0 && (
+                    <span className="px-1.5 py-0.5 rounded-full bg-primary/15 text-primary text-xs font-medium">
+                      {form.invitees.length}
+                    </span>
+                  )}
+                </span>
+                <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform ${inviteOpen ? "rotate-180" : ""}`} />
+              </button>
+              {inviteOpen && (
+                <div className="mt-2 space-y-2 max-h-48 overflow-y-auto">
+                  {friends.map((f) => (
+                    <button
+                      key={f.id}
+                      type="button"
+                      onClick={() => toggleInvitee(f.id)}
+                      className={`w-full flex items-center gap-3 rounded-lg px-3 py-2.5 border transition-colors text-left ${
+                        form.invitees.includes(f.id)
+                          ? "border-primary bg-primary/10"
+                          : "border-border bg-background hover:border-muted-foreground/30"
+                      }`}
+                    >
+                      <Avatar name={f.name} size={32} />
+                      <span className="font-body text-sm text-foreground flex-1">{f.name}</span>
+                      {form.invitees.includes(f.id) && (
+                        <span className="text-xs font-body font-medium text-primary">Invited</span>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Co-hosts */}
+            <div>
+              <button
+                type="button"
+                onClick={() => setCoHostOpen((v) => !v)}
+                className="w-full flex items-center justify-between rounded-lg border border-border bg-background px-3 py-2.5 hover:border-muted-foreground/30 transition-colors"
+              >
+                <span className="flex items-center gap-2 font-body text-sm text-foreground">
+                  <Crown className="h-4 w-4 text-teal" />
+                  Add Co-hosts
+                  {form.coHosts.length > 0 && (
+                    <span className="px-1.5 py-0.5 rounded-full bg-teal/15 text-teal text-xs font-medium">
+                      {form.coHosts.length}
+                    </span>
+                  )}
+                </span>
+                <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform ${coHostOpen ? "rotate-180" : ""}`} />
+              </button>
+              {coHostOpen && (
+                <div className="mt-2 space-y-2 max-h-48 overflow-y-auto">
+                  {friends.map((f) => (
+                    <button
+                      key={f.id}
+                      type="button"
+                      onClick={() => toggleCoHost(f.id)}
+                      className={`w-full flex items-center gap-3 rounded-lg px-3 py-2.5 border transition-colors text-left ${
+                        form.coHosts.includes(f.id)
+                          ? "border-teal bg-teal/10"
+                          : "border-border bg-background hover:border-muted-foreground/30"
+                      }`}
+                    >
+                      <Avatar name={f.name} size={32} />
+                      <span className="font-body text-sm text-foreground flex-1">{f.name}</span>
+                      {form.coHosts.includes(f.id) && (
+                        <span className="text-xs font-body font-medium text-teal">Co-host</span>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Actions */}
