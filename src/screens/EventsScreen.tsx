@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { useApp, AppEvent } from "@/context/AppContext";
-import { CalendarDays, MapPin, Users, Plus, Image, X, ChefHat } from "lucide-react";
+import { CalendarDays, MapPin, Users, Plus, Image, X, ChefHat, ChevronDown, UserPlus, Crown } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import {
   Dialog,
@@ -20,6 +20,7 @@ interface EventForm {
   isPotluck: boolean;
   imagePreview: string | null;
   coHosts: string[];
+  invitees: string[];
 }
 
 const defaultForm: EventForm = {
@@ -30,6 +31,7 @@ const defaultForm: EventForm = {
   isPotluck: false,
   imagePreview: null,
   coHosts: [],
+  invitees: [],
 };
 
 const EventsScreen = ({ onSelectEvent }: { onSelectEvent: (id: string) => void }) => {
@@ -37,6 +39,8 @@ const EventsScreen = ({ onSelectEvent }: { onSelectEvent: (id: string) => void }
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState<EventForm>(defaultForm);
+  const [coHostOpen, setCoHostOpen] = useState(false);
+  const [inviteOpen, setInviteOpen] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const handleImage = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,6 +57,19 @@ const EventsScreen = ({ onSelectEvent }: { onSelectEvent: (id: string) => void }
       coHosts: f.coHosts.includes(id)
         ? f.coHosts.filter((c) => c !== id)
         : [...f.coHosts, id],
+      // ensure co-hosts are also invited as guests
+      invitees: f.invitees.includes(id) || f.coHosts.includes(id) ? f.invitees : [...f.invitees, id],
+    }));
+  };
+
+  const toggleInvitee = (id: string) => {
+    setForm((f) => ({
+      ...f,
+      invitees: f.invitees.includes(id)
+        ? f.invitees.filter((c) => c !== id)
+        : [...f.invitees, id],
+      // removing an invitee also removes them as co-host
+      coHosts: f.invitees.includes(id) ? f.coHosts.filter((c) => c !== id) : f.coHosts,
     }));
   };
 
@@ -77,7 +94,13 @@ const EventsScreen = ({ onSelectEvent }: { onSelectEvent: (id: string) => void }
       coHosts: form.coHosts.length
         ? form.coHosts.map((id) => friends.find((f) => f.id === id)?.name || id)
         : undefined,
-      guests: [{ id: user.id, name: user.name, restrictions: user.restrictions }],
+      guests: [
+        { id: user.id, name: user.name, restrictions: user.restrictions },
+        ...form.invitees.map((id) => {
+          const fr = friends.find((f) => f.id === id);
+          return { id: `g-${id}-${Date.now()}`, name: fr?.name || id, restrictions: fr?.restrictions || [] };
+        }),
+      ],
     };
     setEvents([...events, newEvent]);
     setForm(defaultForm);
