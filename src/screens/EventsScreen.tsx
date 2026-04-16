@@ -1,6 +1,6 @@
 import { useState, useRef } from "react";
 import { useApp, AppEvent } from "@/context/AppContext";
-import { CalendarDays, MapPin, Users, Plus, Image, X, ChefHat } from "lucide-react";
+import { CalendarDays, MapPin, Users, Plus, Image, X, ChefHat, ChevronDown, UserPlus, Crown } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import {
   Dialog,
@@ -20,6 +20,7 @@ interface EventForm {
   isPotluck: boolean;
   imagePreview: string | null;
   coHosts: string[];
+  invitees: string[];
 }
 
 const defaultForm: EventForm = {
@@ -30,6 +31,7 @@ const defaultForm: EventForm = {
   isPotluck: false,
   imagePreview: null,
   coHosts: [],
+  invitees: [],
 };
 
 const EventsScreen = ({ onSelectEvent }: { onSelectEvent: (id: string) => void }) => {
@@ -37,6 +39,8 @@ const EventsScreen = ({ onSelectEvent }: { onSelectEvent: (id: string) => void }
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState<EventForm>(defaultForm);
+  const [coHostOpen, setCoHostOpen] = useState(false);
+  const [inviteOpen, setInviteOpen] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
 
   const handleImage = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,6 +57,19 @@ const EventsScreen = ({ onSelectEvent }: { onSelectEvent: (id: string) => void }
       coHosts: f.coHosts.includes(id)
         ? f.coHosts.filter((c) => c !== id)
         : [...f.coHosts, id],
+      // ensure co-hosts are also invited as guests
+      invitees: f.invitees.includes(id) || f.coHosts.includes(id) ? f.invitees : [...f.invitees, id],
+    }));
+  };
+
+  const toggleInvitee = (id: string) => {
+    setForm((f) => ({
+      ...f,
+      invitees: f.invitees.includes(id)
+        ? f.invitees.filter((c) => c !== id)
+        : [...f.invitees, id],
+      // removing an invitee also removes them as co-host
+      coHosts: f.invitees.includes(id) ? f.coHosts.filter((c) => c !== id) : f.coHosts,
     }));
   };
 
@@ -77,7 +94,13 @@ const EventsScreen = ({ onSelectEvent }: { onSelectEvent: (id: string) => void }
       coHosts: form.coHosts.length
         ? form.coHosts.map((id) => friends.find((f) => f.id === id)?.name || id)
         : undefined,
-      guests: [{ id: user.id, name: user.name, restrictions: user.restrictions }],
+      guests: [
+        { id: user.id, name: user.name, restrictions: user.restrictions },
+        ...form.invitees.map((id) => {
+          const fr = friends.find((f) => f.id === id);
+          return { id: `g-${id}-${Date.now()}`, name: fr?.name || id, restrictions: fr?.restrictions || [] };
+        }),
+      ],
     };
     setEvents([...events, newEvent]);
     setForm(defaultForm);
@@ -203,28 +226,88 @@ const EventsScreen = ({ onSelectEvent }: { onSelectEvent: (id: string) => void }
               )}
             </div>
 
-            {/* Co-hosts from Friends */}
+            {/* Invite Guests */}
             <div>
-              <label className="font-body text-xs font-medium text-muted-foreground mb-1.5 block">Co-hosts</label>
-              <div className="space-y-2">
-                {friends.map((f) => (
-                  <button
-                    key={f.id}
-                    onClick={() => toggleCoHost(f.id)}
-                    className={`w-full flex items-center gap-3 rounded-lg px-3 py-2.5 border transition-colors text-left ${
-                      form.coHosts.includes(f.id)
-                        ? "border-teal bg-teal/10"
-                        : "border-border bg-background hover:border-muted-foreground/30"
-                    }`}
-                  >
-                    <Avatar name={f.name} size={32} />
-                    <span className="font-body text-sm text-foreground flex-1">{f.name}</span>
-                    {form.coHosts.includes(f.id) && (
-                      <span className="text-xs font-body font-medium text-teal">Co-host</span>
-                    )}
-                  </button>
-                ))}
-              </div>
+              <button
+                type="button"
+                onClick={() => setInviteOpen((v) => !v)}
+                className="w-full flex items-center justify-between rounded-lg border border-border bg-background px-3 py-2.5 hover:border-muted-foreground/30 transition-colors"
+              >
+                <span className="flex items-center gap-2 font-body text-sm text-foreground">
+                  <UserPlus className="h-4 w-4 text-primary" />
+                  Invite Guests
+                  {form.invitees.length > 0 && (
+                    <span className="px-1.5 py-0.5 rounded-full bg-primary/15 text-primary text-xs font-medium">
+                      {form.invitees.length}
+                    </span>
+                  )}
+                </span>
+                <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform ${inviteOpen ? "rotate-180" : ""}`} />
+              </button>
+              {inviteOpen && (
+                <div className="mt-2 space-y-2 max-h-48 overflow-y-auto">
+                  {friends.map((f) => (
+                    <button
+                      key={f.id}
+                      type="button"
+                      onClick={() => toggleInvitee(f.id)}
+                      className={`w-full flex items-center gap-3 rounded-lg px-3 py-2.5 border transition-colors text-left ${
+                        form.invitees.includes(f.id)
+                          ? "border-primary bg-primary/10"
+                          : "border-border bg-background hover:border-muted-foreground/30"
+                      }`}
+                    >
+                      <Avatar name={f.name} size={32} />
+                      <span className="font-body text-sm text-foreground flex-1">{f.name}</span>
+                      {form.invitees.includes(f.id) && (
+                        <span className="text-xs font-body font-medium text-primary">Invited</span>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Co-hosts */}
+            <div>
+              <button
+                type="button"
+                onClick={() => setCoHostOpen((v) => !v)}
+                className="w-full flex items-center justify-between rounded-lg border border-border bg-background px-3 py-2.5 hover:border-muted-foreground/30 transition-colors"
+              >
+                <span className="flex items-center gap-2 font-body text-sm text-foreground">
+                  <Crown className="h-4 w-4 text-teal" />
+                  Add Co-hosts
+                  {form.coHosts.length > 0 && (
+                    <span className="px-1.5 py-0.5 rounded-full bg-teal/15 text-teal text-xs font-medium">
+                      {form.coHosts.length}
+                    </span>
+                  )}
+                </span>
+                <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform ${coHostOpen ? "rotate-180" : ""}`} />
+              </button>
+              {coHostOpen && (
+                <div className="mt-2 space-y-2 max-h-48 overflow-y-auto">
+                  {friends.map((f) => (
+                    <button
+                      key={f.id}
+                      type="button"
+                      onClick={() => toggleCoHost(f.id)}
+                      className={`w-full flex items-center gap-3 rounded-lg px-3 py-2.5 border transition-colors text-left ${
+                        form.coHosts.includes(f.id)
+                          ? "border-teal bg-teal/10"
+                          : "border-border bg-background hover:border-muted-foreground/30"
+                      }`}
+                    >
+                      <Avatar name={f.name} size={32} />
+                      <span className="font-body text-sm text-foreground flex-1">{f.name}</span>
+                      {form.coHosts.includes(f.id) && (
+                        <span className="text-xs font-body font-medium text-teal">Co-host</span>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Actions */}
