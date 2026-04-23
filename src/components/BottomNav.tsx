@@ -1,11 +1,11 @@
-import { UtensilsCrossed, CalendarDays, Sparkles } from "lucide-react";
+import { UtensilsCrossed, CalendarDays, MapPin } from "lucide-react";
 
-type Tab = "profile" | "events" | "discover";
+type Tab = "profile" | "events" | "dineout";
 
 const tabs: { id: Tab; label: string; icon: React.ElementType }[] = [
   { id: "profile", label: "Profile", icon: UtensilsCrossed },
   { id: "events", label: "Events", icon: CalendarDays },
-  { id: "discover", label: "Discover", icon: Sparkles },
+  { id: "dineout", label: "Dine Out", icon: MapPin },
 ];
 
 const BottomNav = ({ active, onNavigate }: { active: Tab; onNavigate: (tab: Tab) => void }) => (

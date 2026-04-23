@@ -5,7 +5,7 @@ import ProfileScreen from "@/screens/ProfileScreen";
 
 import EventsScreen from "@/screens/EventsScreen";
 import EventDetailScreen from "@/screens/EventDetailScreen";
-import DiscoverScreen from "@/screens/DiscoverScreen";
+import DineOutScreen from "@/screens/DineOutScreen";
 import BottomNav, { Tab } from "@/components/BottomNav";
 import logo from "@/assets/dinner-party-logo.png";
 
@@ -25,7 +25,7 @@ const AppShell = () => {
     switch (tab) {
       case "profile": return <ProfileScreen />;
       case "events": return <EventsScreen onSelectEvent={(id) => setSelectedEvent(id)} />;
-      case "discover": return <DiscoverScreen />;
+      case "dineout": return <DineOutScreen />;
     }
   };
 
