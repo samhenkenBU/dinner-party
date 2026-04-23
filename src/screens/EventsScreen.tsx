@@ -2,13 +2,7 @@ import { useState, useRef } from "react";
 import { useApp, AppEvent } from "@/context/AppContext";
 import { CalendarDays, MapPin, Users, Plus, Image, X, ChefHat, ChevronDown, UserPlus, Crown } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Checkbox } from "@/components/ui/checkbox";
 import Avatar from "@/components/Avatar";
 
@@ -54,9 +48,7 @@ const EventsScreen = ({ onSelectEvent }: { onSelectEvent: (id: string) => void }
   const toggleCoHost = (id: string) => {
     setForm((f) => ({
       ...f,
-      coHosts: f.coHosts.includes(id)
-        ? f.coHosts.filter((c) => c !== id)
-        : [...f.coHosts, id],
+      coHosts: f.coHosts.includes(id) ? f.coHosts.filter((c) => c !== id) : [...f.coHosts, id],
       // ensure co-hosts are also invited as guests
       invitees: f.invitees.includes(id) || f.coHosts.includes(id) ? f.invitees : [...f.invitees, id],
     }));
@@ -65,9 +57,7 @@ const EventsScreen = ({ onSelectEvent }: { onSelectEvent: (id: string) => void }
   const toggleInvitee = (id: string) => {
     setForm((f) => ({
       ...f,
-      invitees: f.invitees.includes(id)
-        ? f.invitees.filter((c) => c !== id)
-        : [...f.invitees, id],
+      invitees: f.invitees.includes(id) ? f.invitees.filter((c) => c !== id) : [...f.invitees, id],
       // removing an invitee also removes them as co-host
       coHosts: f.invitees.includes(id) ? f.coHosts.filter((c) => c !== id) : f.coHosts,
     }));
@@ -91,9 +81,7 @@ const EventsScreen = ({ onSelectEvent }: { onSelectEvent: (id: string) => void }
       hostName: user.name,
       isPotluck: form.isPotluck,
       imageUrl: form.imagePreview || undefined,
-      coHosts: form.coHosts.length
-        ? form.coHosts.map((id) => friends.find((f) => f.id === id)?.name || id)
-        : undefined,
+      coHosts: form.coHosts.length ? form.coHosts.map((id) => friends.find((f) => f.id === id)?.name || id) : undefined,
       guests: [
         { id: user.id, name: user.name, restrictions: user.restrictions },
         ...form.invitees.map((id) => {
@@ -113,7 +101,7 @@ const EventsScreen = ({ onSelectEvent }: { onSelectEvent: (id: string) => void }
     e.guests.forEach((g) =>
       g.restrictions.forEach((r) => {
         counts[r] = (counts[r] || 0) + 1;
-      })
+      }),
     );
     return counts;
   };
@@ -130,9 +118,14 @@ const EventsScreen = ({ onSelectEvent }: { onSelectEvent: (id: string) => void }
         </button>
       </div>
 
-
       {/* Create Event Dialog */}
-      <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) setForm(defaultForm); }}>
+      <Dialog
+        open={open}
+        onOpenChange={(v) => {
+          setOpen(v);
+          if (!v) setForm(defaultForm);
+        }}
+      >
         <DialogContent className="max-w-[400px] rounded-2xl bg-card p-0 gap-0 max-h-[85vh] overflow-y-auto">
           <DialogHeader className="p-5 pb-2">
             <DialogTitle className="font-display text-xl text-foreground">Create Event</DialogTitle>
@@ -195,7 +188,10 @@ const EventsScreen = ({ onSelectEvent }: { onSelectEvent: (id: string) => void }
                 onCheckedChange={(v) => setForm({ ...form, isPotluck: !!v })}
                 className="border-teal data-[state=checked]:bg-teal data-[state=checked]:border-teal"
               />
-              <label htmlFor="potluck" className="font-body text-sm text-foreground flex items-center gap-1.5 cursor-pointer">
+              <label
+                htmlFor="potluck"
+                className="font-body text-sm text-foreground flex items-center gap-1.5 cursor-pointer"
+              >
                 <ChefHat className="h-4 w-4 text-teal" />
                 This is a potluck
               </label>
@@ -242,7 +238,9 @@ const EventsScreen = ({ onSelectEvent }: { onSelectEvent: (id: string) => void }
                     </span>
                   )}
                 </span>
-                <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform ${inviteOpen ? "rotate-180" : ""}`} />
+                <ChevronDown
+                  className={`h-4 w-4 text-muted-foreground transition-transform ${inviteOpen ? "rotate-180" : ""}`}
+                />
               </button>
               {inviteOpen && (
                 <div className="mt-2 space-y-2 max-h-48 overflow-y-auto">
@@ -284,7 +282,9 @@ const EventsScreen = ({ onSelectEvent }: { onSelectEvent: (id: string) => void }
                     </span>
                   )}
                 </span>
-                <ChevronDown className={`h-4 w-4 text-muted-foreground transition-transform ${coHostOpen ? "rotate-180" : ""}`} />
+                <ChevronDown
+                  className={`h-4 w-4 text-muted-foreground transition-transform ${coHostOpen ? "rotate-180" : ""}`}
+                />
               </button>
               {coHostOpen && (
                 <div className="mt-2 space-y-2 max-h-48 overflow-y-auto">
@@ -313,7 +313,10 @@ const EventsScreen = ({ onSelectEvent }: { onSelectEvent: (id: string) => void }
             {/* Actions */}
             <div className="flex gap-2 pt-2">
               <button
-                onClick={() => { setOpen(false); setForm(defaultForm); }}
+                onClick={() => {
+                  setOpen(false);
+                  setForm(defaultForm);
+                }}
                 className="flex-1 rounded-lg border border-border px-4 py-2.5 text-sm font-body font-medium active:scale-95 transition-transform"
               >
                 Cancel
@@ -331,6 +334,38 @@ const EventsScreen = ({ onSelectEvent }: { onSelectEvent: (id: string) => void }
 
       {/* Event List */}
       <div className="space-y-3">
+        {events.length === 0 && (
+          <div className="flex flex-col items-center justify-center py-16 text-center">
+            <svg
+              width="80"
+              height="80"
+              viewBox="0 0 80 80"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              className="mb-4 opacity-40"
+            >
+              <circle cx="40" cy="40" r="36" stroke="currentColor" strokeWidth="3" className="text-muted-foreground" />
+              <path
+                d="M28 40h24M40 28v24"
+                stroke="currentColor"
+                strokeWidth="3"
+                strokeLinecap="round"
+                className="text-muted-foreground"
+              />
+              <circle cx="40" cy="40" r="6" fill="currentColor" className="text-muted" />
+            </svg>
+            <p className="font-display text-lg font-bold text-foreground mb-1">No events yet</p>
+            <p className="font-body text-sm text-muted-foreground mb-5">
+              Create your first event to start coordinating meals with friends.
+            </p>
+            <button
+              onClick={() => setOpen(true)}
+              className="rounded-lg bg-primary text-primary-foreground px-5 py-2.5 text-sm font-body font-medium active:scale-95 transition-transform"
+            >
+              Create an Event
+            </button>
+          </div>
+        )}
         {events.map((e) => {
           const rc = allRestrictions(e);
           return (
@@ -339,9 +374,7 @@ const EventsScreen = ({ onSelectEvent }: { onSelectEvent: (id: string) => void }
               onClick={() => onSelectEvent(e.id)}
               className="w-full text-left bg-primary-foreground rounded-2xl shadow-warm p-4 active:scale-[0.98] transition-transform"
             >
-              {e.imageUrl && (
-                <img src={e.imageUrl} alt={e.name} className="w-full h-28 object-cover rounded-xl mb-3" />
-              )}
+              {e.imageUrl && <img src={e.imageUrl} alt={e.name} className="w-full h-28 object-cover rounded-xl mb-3" />}
               <div className="flex items-center gap-2">
                 <h3 className="font-display font-bold text-lg text-foreground">{e.name}</h3>
                 {e.isPotluck && (
@@ -350,20 +383,25 @@ const EventsScreen = ({ onSelectEvent }: { onSelectEvent: (id: string) => void }
                   </span>
                 )}
               </div>
-              {e.description && (
-                <p className="mt-2 font-body text-sm text-muted-foreground">{e.description}</p>
-              )}
+              {e.description && <p className="mt-2 font-body text-sm text-muted-foreground">{e.description}</p>}
               <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground font-body">
-                <span className="flex items-center gap-1"><CalendarDays className="h-3.5 w-3.5" />{new Date(e.date).toLocaleDateString()}</span>
-                <span className="flex items-center gap-1"><MapPin className="h-3.5 w-3.5" />{e.location}</span>
-                <span className="flex items-center gap-1"><Users className="h-3.5 w-3.5" />{e.guests.length}</span>
+                <span className="flex items-center gap-1">
+                  <CalendarDays className="h-3.5 w-3.5" />
+                  {new Date(e.date).toLocaleDateString()}
+                </span>
+                <span className="flex items-center gap-1">
+                  <MapPin className="h-3.5 w-3.5" />
+                  {e.location}
+                </span>
+                <span className="flex items-center gap-1">
+                  <Users className="h-3.5 w-3.5" />
+                  {e.guests.length}
+                </span>
               </div>
               <div className="mt-3 flex flex-wrap gap-2">
                 <span
                   className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-body font-medium ${
-                    e.isPotluck
-                      ? "bg-primary/10 text-primary"
-                      : "bg-muted text-muted-foreground"
+                    e.isPotluck ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground"
                   }`}
                 >
                   <ChefHat className="h-3 w-3" />

@@ -12,11 +12,21 @@ const FriendsScreen = () => {
 
   const handleAdd = () => {
     if (!input.trim()) return;
-    const found = friends.some((f) => f.name.toLowerCase() === input.toLowerCase() || f.email.toLowerCase() === input.toLowerCase());
-    toast({
-      title: found ? "Already friends!" : Math.random() > 0.5 ? "Request sent!" : "User not found",
-      description: found ? "This person is already your friend." : undefined,
-    });
+    const trimmed = input.trim().toLowerCase();
+    const isEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed);
+    const isPhone = /^[\d\s\-().+]{7,}$/.test(trimmed);
+
+    const alreadyFriend = friends.some((f) => f.name.toLowerCase() === trimmed || f.email.toLowerCase() === trimmed);
+
+    if (alreadyFriend) {
+      toast({ title: "Already friends!", description: "This person is already in your friends list." });
+    } else if (isEmail || isPhone) {
+      toast({ title: "Request sent!", description: `An invite was sent to ${input.trim()}.` });
+    } else if (trimmed.length < 3) {
+      toast({ title: "Too short", description: "Enter a full name, email, or phone number." });
+    } else {
+      toast({ title: "User not found", description: "No Dinner Party account found for that name or contact." });
+    }
     setInput("");
   };
 
@@ -32,7 +42,10 @@ const FriendsScreen = () => {
           placeholder="Name, email, or phone..."
           className="flex-1 rounded-lg border border-border bg-primary-foreground px-3 py-2.5 font-body text-sm"
         />
-        <button onClick={handleAdd} className="rounded-lg bg-primary text-primary-foreground p-2.5 active:scale-95 transition-transform">
+        <button
+          onClick={handleAdd}
+          className="rounded-lg bg-primary text-primary-foreground p-2.5 active:scale-95 transition-transform"
+        >
           <UserPlus className="h-5 w-5" />
         </button>
       </div>
