@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { useApp, AppEvent } from "@/context/AppContext";
 import { CalendarDays, MapPin, Users, Plus, Image, X, ChefHat, ChevronDown, UserPlus, Crown, Utensils } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
