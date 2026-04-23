@@ -5,7 +5,14 @@ import RestrictionTag from "@/components/RestrictionTag";
 import { ArrowLeft, Send, Search, ChefHat, Check, X as XIcon, AlertTriangle } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { motion, AnimatePresence } from "framer-motion";
-import { checkDishSafety, getSafeAlternatives, DishSafetyResult } from "@/lib/dishSafety";
+import {
+  checkDishSafety,
+  getSafeAlternatives,
+  getSaferVariants,
+  getDishSuggestions,
+  DishSafetyResult,
+  ManualOverride,
+} from "@/lib/dishSafety";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 const EventDetailScreen = ({ eventId, onBack }: { eventId: string; onBack: () => void }) => {
@@ -19,6 +26,10 @@ const EventDetailScreen = ({ eventId, onBack }: { eventId: string; onBack: () =>
   const [selectedGuest, setSelectedGuest] = useState<(typeof event.guests)[number] | null>(null);
   const [confirmRedOpen, setConfirmRedOpen] = useState(false);
   const [pendingDishName, setPendingDishName] = useState<string | null>(null);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [saferVariants, setSaferVariants] = useState<{ label: string; rating: string }[]>([]);
+  const [override, setOverride] = useState<ManualOverride>({ removes: [] });
+  const [showOverride, setShowOverride] = useState(false);
 
   const restrictionSummary = useMemo(() => {
     if (!event) return {};
@@ -38,13 +49,52 @@ const EventDetailScreen = ({ eventId, onBack }: { eventId: string; onBack: () =>
 
   const handleCheck = () => {
     if (!dishInput.trim()) return;
-    const res = checkDishSafety(dishInput.trim(), guestRestrictions);
+    setSuggestions([]);
+    const res = checkDishSafety(
+      dishInput.trim(),
+      guestRestrictions,
+      override.removes.length > 0 ? override : undefined,
+    );
     setResult(res);
     if (res.rating === "red" || res.rating === "yellow") {
       setAlternatives(getSafeAlternatives(guestRestrictions, res.matchedDish || undefined));
+      setSaferVariants(getSaferVariants(res.matchedDish || dishInput.trim(), guestRestrictions));
     } else {
       setAlternatives([]);
+      setSaferVariants([]);
     }
+  };
+
+  const handleDishInputChange = (val: string) => {
+    setDishInput(val);
+    setResult(null);
+    setSuggestions(val.length >= 2 ? getDishSuggestions(val) : []);
+  };
+
+  const selectSuggestion = (name: string) => {
+    setDishInput(name);
+    setSuggestions([]);
+    setResult(null);
+  };
+
+  const ALLERGEN_OPTIONS = [
+    "gluten",
+    "dairy",
+    "eggs",
+    "tree nuts",
+    "peanuts",
+    "soy",
+    "shellfish",
+    "fish",
+    "sesame",
+    "wheat",
+  ];
+
+  const toggleOverrideAllergen = (a: string) => {
+    setOverride((prev) => ({
+      removes: prev.removes.includes(a) ? prev.removes.filter((x) => x !== a) : [...prev.removes, a],
+    }));
+    setResult(null);
   };
 
   const commitAddDish = (name: string) => {
@@ -81,12 +131,6 @@ const EventDetailScreen = ({ eventId, onBack }: { eventId: string; onBack: () =>
     yellow: "bg-caution text-foreground",
     red: "bg-danger text-primary-foreground",
     unknown: "bg-muted text-muted-foreground",
-  };
-  const dotColors: Record<string, string> = {
-    green: "bg-safe",
-    yellow: "bg-caution",
-    red: "bg-danger",
-    unknown: "bg-muted",
   };
   const badgeEmoji: Record<string, string> = { green: "🟢", yellow: "🟡", red: "🔴", unknown: "🟡" };
 
@@ -207,28 +251,27 @@ const EventDetailScreen = ({ eventId, onBack }: { eventId: string; onBack: () =>
                       </div>
                       {safetyResult && (
                         <span
-                          aria-label={safetyResult.rating}
-                          className={`h-3 w-3 rounded-full shrink-0 ${dotColors[safetyResult.rating]}`}
-                        />
+                          className={`px-2 py-0.5 rounded-full text-xs font-body font-medium ${badgeColors[safetyResult.rating]}`}
+                        >
+                          {badgeEmoji[safetyResult.rating]}
+                        </span>
                       )}
-                      <div className="w-7 shrink-0 flex items-center justify-center">
-                        {d.guestName === user.name && (
-                          <button
-                            onClick={() =>
-                              setEvents((prev) =>
-                                prev.map((e) =>
-                                  e.id === eventId
-                                    ? { ...e, dishes: (e.dishes || []).filter((dish) => dish.id !== d.id) }
-                                    : e,
-                                ),
-                              )
-                            }
-                            className="p-1.5 rounded-full hover:bg-danger/10 text-muted-foreground hover:text-danger transition-colors active:scale-95"
-                          >
-                            <XIcon className="h-4 w-4" />
-                          </button>
-                        )}
-                      </div>
+                      {d.guestName === user.name && (
+                        <button
+                          onClick={() =>
+                            setEvents((prev) =>
+                              prev.map((e) =>
+                                e.id === eventId
+                                  ? { ...e, dishes: (e.dishes || []).filter((dish) => dish.id !== d.id) }
+                                  : e,
+                              ),
+                            )
+                          }
+                          className="p-1.5 rounded-full hover:bg-danger/10 text-muted-foreground hover:text-danger transition-colors active:scale-95"
+                        >
+                          <XIcon className="h-4 w-4" />
+                        </button>
+                      )}
                     </div>
                   );
                 })}
@@ -238,24 +281,88 @@ const EventDetailScreen = ({ eventId, onBack }: { eventId: string; onBack: () =>
 
           {/* Dish Safety Checker + Add */}
           <h2 className="font-display text-lg font-bold text-foreground mt-6 mb-3">Add a Dish</h2>
-          <div className="flex gap-2">
-            <input
-              value={dishInput}
-              onChange={(e) => {
-                setDishInput(e.target.value);
-                setResult(null);
-              }}
-              onKeyDown={(e) => e.key === "Enter" && handleCheck()}
-              placeholder="Search for a dish to bring..."
-              className="flex-1 rounded-lg border border-border bg-primary-foreground px-3 py-2.5 font-body text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
-            />
-            <button
-              onClick={handleCheck}
-              className="rounded-lg bg-primary text-primary-foreground p-2.5 active:scale-95 transition-transform"
-            >
-              <Search className="h-5 w-5" />
-            </button>
+          <div className="relative">
+            <div className="flex gap-2">
+              <input
+                value={dishInput}
+                onChange={(e) => handleDishInputChange(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleCheck();
+                  if (e.key === "Escape") setSuggestions([]);
+                }}
+                placeholder="Search for a dish to bring..."
+                className="flex-1 rounded-lg border border-border bg-primary-foreground px-3 py-2.5 font-body text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
+              />
+              <button
+                onClick={handleCheck}
+                className="rounded-lg bg-primary text-primary-foreground p-2.5 active:scale-95 transition-transform"
+              >
+                <Search className="h-5 w-5" />
+              </button>
+            </div>
+
+            {/* Autocomplete dropdown */}
+            <AnimatePresence>
+              {suggestions.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, y: -4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -4 }}
+                  className="absolute top-full left-0 right-10 mt-1 bg-primary-foreground border border-border rounded-xl shadow-warm z-20 overflow-hidden"
+                >
+                  {suggestions.map((s) => (
+                    <button
+                      key={s}
+                      onClick={() => selectSuggestion(s)}
+                      className="block w-full text-left px-3 py-2.5 font-body text-sm hover:bg-background transition-colors border-b border-border last:border-0"
+                    >
+                      {s}
+                    </button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
+
+          {/* Manual override toggle */}
+          <button
+            onClick={() => setShowOverride((v) => !v)}
+            className="mt-2 flex items-center gap-1.5 text-xs font-body text-muted-foreground active:scale-95 transition-transform"
+          >
+            <ChefHat className="h-3.5 w-3.5" />
+            {showOverride ? "Hide" : "Making a special version?"} (e.g. gluten-free, dairy-free)
+          </button>
+
+          <AnimatePresence>
+            {showOverride && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                className="overflow-hidden"
+              >
+                <div className="mt-2 p-3 rounded-xl bg-primary-foreground border border-border">
+                  <p className="font-body text-xs font-medium text-foreground mb-2">My version does NOT contain:</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {ALLERGEN_OPTIONS.map((a) => (
+                      <button
+                        key={a}
+                        onClick={() => toggleOverrideAllergen(a)}
+                        className={`px-2.5 py-1 rounded-full text-xs font-body font-medium transition-colors active:scale-95 capitalize ${
+                          override.removes.includes(a)
+                            ? "bg-safe text-primary-foreground"
+                            : "bg-muted text-muted-foreground"
+                        }`}
+                      >
+                        {override.removes.includes(a) ? "✓ " : ""}
+                        {a}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           <AnimatePresence>
             {result && (
@@ -296,10 +403,34 @@ const EventDetailScreen = ({ eventId, onBack }: { eventId: string; onBack: () =>
                           onClick={() => {
                             setDishInput(d);
                             setResult(null);
+                            setSuggestions([]);
                           }}
                           className="px-2.5 py-1 rounded-full bg-safe/20 text-safe text-xs font-body font-medium active:scale-95 transition-transform"
                         >
                           {d}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {saferVariants.length > 0 && (
+                  <div className="mt-3">
+                    <p className="font-body text-xs font-medium text-foreground mb-1.5">Safer versions of this dish:</p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {saferVariants.map((v) => (
+                        <button
+                          key={v.label}
+                          onClick={() => {
+                            setDishInput(v.label);
+                            setResult(null);
+                            setSuggestions([]);
+                          }}
+                          className={`px-2.5 py-1 rounded-full text-xs font-body font-medium active:scale-95 transition-transform ${
+                            v.rating === "green" ? "bg-safe/20 text-safe" : "bg-caution/20 text-caution"
+                          }`}
+                        >
+                          {v.rating === "green" ? "🟢" : "🟡"} {v.label}
                         </button>
                       ))}
                     </div>
