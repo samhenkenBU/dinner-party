@@ -1,10 +1,11 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo } from "react";
 import { useApp, AppEvent } from "@/context/AppContext";
-import { CalendarDays, MapPin, Users, Plus, Image, X, ChefHat, ChevronDown, UserPlus, Crown } from "lucide-react";
+import { CalendarDays, MapPin, Users, Plus, Image, X, ChefHat, ChevronDown, UserPlus, Crown, Utensils } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Checkbox } from "@/components/ui/checkbox";
 import Avatar from "@/components/Avatar";
+import RestaurantPicker from "@/components/RestaurantPicker";
 
 interface EventForm {
   name: string;
@@ -35,7 +36,18 @@ const EventsScreen = ({ onSelectEvent }: { onSelectEvent: (id: string) => void }
   const [form, setForm] = useState<EventForm>(defaultForm);
   const [coHostOpen, setCoHostOpen] = useState(false);
   const [inviteOpen, setInviteOpen] = useState(false);
+  const [restaurantPickerOpen, setRestaurantPickerOpen] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+
+  // Combined restrictions of host + invitees, for restaurant matching
+  const guestRestrictions = useMemo(() => {
+    const groups: string[][] = [user.restrictions.map((r) => r.toLowerCase())];
+    form.invitees.forEach((id) => {
+      const fr = friends.find((f) => f.id === id);
+      if (fr) groups.push(fr.restrictions.map((r) => r.toLowerCase()));
+    });
+    return groups;
+  }, [user.restrictions, form.invitees, friends]);
 
   // Consume prefill from Dine Out → open dialog with restaurant data
   useEffect(() => {
@@ -194,6 +206,20 @@ const EventsScreen = ({ onSelectEvent }: { onSelectEvent: (id: string) => void }
               </div>
             </div>
 
+            {/* Restaurant Picker */}
+            <button
+              type="button"
+              onClick={() => setRestaurantPickerOpen(true)}
+              className="w-full flex items-center justify-between rounded-lg border border-border bg-background px-3 py-2.5 hover:border-muted-foreground/30 transition-colors"
+            >
+              <span className="flex items-center gap-2 font-body text-sm text-foreground">
+                <Utensils className="h-4 w-4 text-primary" />
+                Choose a Restaurant
+                <span className="font-body text-xs text-muted-foreground">(optional)</span>
+              </span>
+              <span className="font-body text-xs text-muted-foreground">Browse →</span>
+            </button>
+
             {/* Potluck Checkbox */}
             <div className="flex items-center gap-3 py-1">
               <Checkbox
@@ -345,6 +371,22 @@ const EventsScreen = ({ onSelectEvent }: { onSelectEvent: (id: string) => void }
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Restaurant Picker (nested) */}
+      <RestaurantPicker
+        open={restaurantPickerOpen}
+        onOpenChange={setRestaurantPickerOpen}
+        guestRestrictions={guestRestrictions}
+        onPick={(r) => {
+          setForm((f) => ({
+            ...f,
+            location: `${r.name}, ${r.neighborhood}`,
+            name: f.name.trim() ? f.name : `Dinner at ${r.name}`,
+            description: f.description.trim() ? f.description : `${r.cuisine} · ${r.neighborhood}`,
+          }));
+          toast({ title: "Restaurant added", description: r.name });
+        }}
+      />
 
       {/* Event List */}
       <div className="space-y-3">
