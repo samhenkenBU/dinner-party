@@ -82,6 +82,12 @@ const EventDetailScreen = ({ eventId, onBack }: { eventId: string; onBack: () =>
     red: "bg-danger text-primary-foreground",
     unknown: "bg-muted text-muted-foreground",
   };
+  const dotColors: Record<string, string> = {
+    green: "bg-safe",
+    yellow: "bg-caution",
+    red: "bg-danger",
+    unknown: "bg-muted",
+  };
   const badgeEmoji: Record<string, string> = { green: "🟢", yellow: "🟡", red: "🔴", unknown: "🟡" };
 
   // Pre-compute safety rating for each confirmed dish
@@ -201,27 +207,28 @@ const EventDetailScreen = ({ eventId, onBack }: { eventId: string; onBack: () =>
                       </div>
                       {safetyResult && (
                         <span
-                          className={`px-2 py-0.5 rounded-full text-xs font-body font-medium ${badgeColors[safetyResult.rating]}`}
-                        >
-                          {badgeEmoji[safetyResult.rating]}
-                        </span>
+                          aria-label={safetyResult.rating}
+                          className={`h-3 w-3 rounded-full shrink-0 ${dotColors[safetyResult.rating]}`}
+                        />
                       )}
-                      {d.guestName === user.name && (
-                        <button
-                          onClick={() =>
-                            setEvents((prev) =>
-                              prev.map((e) =>
-                                e.id === eventId
-                                  ? { ...e, dishes: (e.dishes || []).filter((dish) => dish.id !== d.id) }
-                                  : e,
-                              ),
-                            )
-                          }
-                          className="p-1.5 rounded-full hover:bg-danger/10 text-muted-foreground hover:text-danger transition-colors active:scale-95"
-                        >
-                          <XIcon className="h-4 w-4" />
-                        </button>
-                      )}
+                      <div className="w-7 shrink-0 flex items-center justify-center">
+                        {d.guestName === user.name && (
+                          <button
+                            onClick={() =>
+                              setEvents((prev) =>
+                                prev.map((e) =>
+                                  e.id === eventId
+                                    ? { ...e, dishes: (e.dishes || []).filter((dish) => dish.id !== d.id) }
+                                    : e,
+                                ),
+                              )
+                            }
+                            className="p-1.5 rounded-full hover:bg-danger/10 text-muted-foreground hover:text-danger transition-colors active:scale-95"
+                          >
+                            <XIcon className="h-4 w-4" />
+                          </button>
+                        )}
+                      </div>
                     </div>
                   );
                 })}
