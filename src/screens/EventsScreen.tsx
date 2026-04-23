@@ -1,10 +1,11 @@
 import { useState, useRef, useEffect } from "react";
 import { useApp, AppEvent } from "@/context/AppContext";
-import { CalendarDays, MapPin, Users, Plus, Image, X, ChefHat, ChevronDown, UserPlus, Crown } from "lucide-react";
+import { CalendarDays, MapPin, Users, Plus, Image, X, ChefHat, ChevronDown, UserPlus, Crown, Utensils } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Checkbox } from "@/components/ui/checkbox";
 import Avatar from "@/components/Avatar";
+import RestaurantPicker from "@/components/RestaurantPicker";
 
 interface EventForm {
   name: string;
