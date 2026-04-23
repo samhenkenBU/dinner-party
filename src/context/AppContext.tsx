@@ -41,6 +41,12 @@ export interface Friend {
   restrictions: string[];
 }
 
+export interface EventPrefill {
+  name?: string;
+  location?: string;
+  description?: string;
+}
+
 interface AppContextType {
   user: UserProfile;
   setUser: React.Dispatch<React.SetStateAction<UserProfile>>;
@@ -50,6 +56,8 @@ interface AppContextType {
   setEvents: React.Dispatch<React.SetStateAction<AppEvent[]>>;
   hasOnboarded: boolean;
   setHasOnboarded: React.Dispatch<React.SetStateAction<boolean>>;
+  eventPrefill: EventPrefill | null;
+  setEventPrefill: React.Dispatch<React.SetStateAction<EventPrefill | null>>;
 }
 
 const defaultUser: UserProfile = {
@@ -115,9 +123,10 @@ export const AppProvider = ({ children }: { children: ReactNode }) => {
   const [friends, setFriends] = useState<Friend[]>(defaultFriends);
   const [events, setEvents] = useState<AppEvent[]>(defaultEvents);
   const [hasOnboarded, setHasOnboarded] = useState(false);
+  const [eventPrefill, setEventPrefill] = useState<EventPrefill | null>(null);
 
   return (
-    <AppContext.Provider value={{ user, setUser, friends, setFriends, events, setEvents, hasOnboarded, setHasOnboarded }}>
+    <AppContext.Provider value={{ user, setUser, friends, setFriends, events, setEvents, hasOnboarded, setHasOnboarded, eventPrefill, setEventPrefill }}>
       {children}
     </AppContext.Provider>
   );
