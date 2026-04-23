@@ -36,7 +36,18 @@ const EventsScreen = ({ onSelectEvent }: { onSelectEvent: (id: string) => void }
   const [form, setForm] = useState<EventForm>(defaultForm);
   const [coHostOpen, setCoHostOpen] = useState(false);
   const [inviteOpen, setInviteOpen] = useState(false);
+  const [restaurantPickerOpen, setRestaurantPickerOpen] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+
+  // Combined restrictions of host + invitees, for restaurant matching
+  const guestRestrictions = useMemo(() => {
+    const groups: string[][] = [user.restrictions.map((r) => r.toLowerCase())];
+    form.invitees.forEach((id) => {
+      const fr = friends.find((f) => f.id === id);
+      if (fr) groups.push(fr.restrictions.map((r) => r.toLowerCase()));
+    });
+    return groups;
+  }, [user.restrictions, form.invitees, friends]);
 
   // Consume prefill from Dine Out → open dialog with restaurant data
   useEffect(() => {
