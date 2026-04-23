@@ -372,6 +372,22 @@ const EventsScreen = ({ onSelectEvent }: { onSelectEvent: (id: string) => void }
         </DialogContent>
       </Dialog>
 
+      {/* Restaurant Picker (nested) */}
+      <RestaurantPicker
+        open={restaurantPickerOpen}
+        onOpenChange={setRestaurantPickerOpen}
+        guestRestrictions={guestRestrictions}
+        onPick={(r) => {
+          setForm((f) => ({
+            ...f,
+            location: `${r.name}, ${r.neighborhood}`,
+            name: f.name.trim() ? f.name : `Dinner at ${r.name}`,
+            description: f.description.trim() ? f.description : `${r.cuisine} · ${r.neighborhood}`,
+          }));
+          toast({ title: "Restaurant added", description: r.name });
+        }}
+      />
+
       {/* Event List */}
       <div className="space-y-3">
         {events.length === 0 && (
