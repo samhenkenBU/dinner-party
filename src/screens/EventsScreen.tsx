@@ -206,6 +206,20 @@ const EventsScreen = ({ onSelectEvent }: { onSelectEvent: (id: string) => void }
               </div>
             </div>
 
+            {/* Restaurant Picker */}
+            <button
+              type="button"
+              onClick={() => setRestaurantPickerOpen(true)}
+              className="w-full flex items-center justify-between rounded-lg border border-border bg-background px-3 py-2.5 hover:border-muted-foreground/30 transition-colors"
+            >
+              <span className="flex items-center gap-2 font-body text-sm text-foreground">
+                <Utensils className="h-4 w-4 text-primary" />
+                Choose a Restaurant
+                <span className="font-body text-xs text-muted-foreground">(optional)</span>
+              </span>
+              <span className="font-body text-xs text-muted-foreground">Browse →</span>
+            </button>
+
             {/* Potluck Checkbox */}
             <div className="flex items-center gap-3 py-1">
               <Checkbox
