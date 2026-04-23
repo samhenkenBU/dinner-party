@@ -1,5 +1,5 @@
-import { useState, useCallback } from "react";
-import { AppProvider } from "@/context/AppContext";
+import { useState, useCallback, useEffect } from "react";
+import { AppProvider, useApp } from "@/context/AppContext";
 import SplashScreen from "@/screens/SplashScreen";
 import ProfileScreen from "@/screens/ProfileScreen";
 
@@ -13,6 +13,15 @@ const AppShell = () => {
   const [showSplash, setShowSplash] = useState(true);
   const [tab, setTab] = useState<Tab>("profile");
   const [selectedEvent, setSelectedEvent] = useState<string | null>(null);
+  const { eventPrefill } = useApp();
+
+  // When Dine Out triggers a prefill, jump to Events tab so the dialog can mount
+  useEffect(() => {
+    if (eventPrefill) {
+      setSelectedEvent(null);
+      setTab("events");
+    }
+  }, [eventPrefill]);
 
   const handleSplashDone = useCallback(() => setShowSplash(false), []);
 

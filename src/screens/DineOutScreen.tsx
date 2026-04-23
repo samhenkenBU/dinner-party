@@ -2,13 +2,18 @@ import { useMemo, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import Fuse from "fuse.js";
-import { Search, ArrowUpDown, MapPin, ExternalLink } from "lucide-react";
+import { Search, ArrowUpDown, MapPin, ExternalLink, SlidersHorizontal, X, CalendarPlus } from "lucide-react";
 import { RESTAURANTS, Restaurant } from "@/data/restaurants";
 import { getRestaurantCompatibility, CompatibilityResult } from "@/lib/restaurantCompatibility";
 import { useApp } from "@/context/AppContext";
 import { useToast } from "@/hooks/use-toast";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 
 type SortMode = "best" | "az";
+
+// Only the 3 restrictions that map directly to restaurant data
+const FILTERABLE_RESTRICTIONS = ["Gluten", "Vegan", "Vegetarian"] as const;
+type FilterableRestriction = (typeof FILTERABLE_RESTRICTIONS)[number];
 
 const tierBg: Record<CompatibilityResult["tierColor"], string> = {
   safe: "bg-safe",
@@ -22,36 +27,40 @@ const tierText: Record<CompatibilityResult["tierColor"], string> = {
   danger: "text-danger",
 };
 
-// Build a small colored circle SVG marker
 const buildMarkerIcon = (colorVar: "safe" | "caution" | "danger") => {
   const color =
     colorVar === "safe" ? "hsl(142,71%,45%)" : colorVar === "caution" ? "hsl(45,93%,47%)" : "hsl(0,84%,60%)";
   const html = `<div style="width:18px;height:18px;border-radius:50%;background:${color};border:2px solid white;box-shadow:0 1px 4px rgba(0,0,0,0.4)"></div>`;
-  return L.divIcon({
-    html,
-    className: "",
-    iconSize: [18, 18],
-    iconAnchor: [9, 9],
-  });
+  return L.divIcon({ html, className: "", iconSize: [18, 18], iconAnchor: [9, 9] });
 };
 
 const DineOutScreen = () => {
-  const { user } = useApp();
+  const { user, setEventPrefill } = useApp();
   const { toast } = useToast();
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState<SortMode>("best");
 
-  // Compatibility against current user only (no event selected)
-  const userRestrictions = useMemo(() => [user.restrictions.map((r) => r.toLowerCase())], [user.restrictions]);
-
-  const enriched = useMemo(
+  // Pre-select the user's restrictions that are filterable
+  const initialFilters = useMemo<FilterableRestriction[]>(
     () =>
-      RESTAURANTS.map((r) => ({
-        restaurant: r,
-        compat: getRestaurantCompatibility(r, userRestrictions),
-      })),
-    [userRestrictions],
+      FILTERABLE_RESTRICTIONS.filter((r) =>
+        user.restrictions.some((u) => u.toLowerCase() === r.toLowerCase()),
+      ),
+    [user.restrictions],
   );
+  const [activeFilters, setActiveFilters] = useState<FilterableRestriction[]>(initialFilters);
+  const [selected, setSelected] = useState<Restaurant | null>(null);
+
+  const toggleFilter = (r: FilterableRestriction) =>
+    setActiveFilters((cur) => (cur.includes(r) ? cur.filter((x) => x !== r) : [...cur, r]));
+
+  const enriched = useMemo(() => {
+    const restrictions = activeFilters.map((r) => r.toLowerCase());
+    return RESTAURANTS.map((r) => ({
+      restaurant: r,
+      compat: getRestaurantCompatibility(r, restrictions.length ? [restrictions] : []),
+    }));
+  }, [activeFilters]);
 
   const fuse = useMemo(
     () =>
@@ -64,18 +73,20 @@ const DineOutScreen = () => {
 
   const filtered = useMemo(() => {
     const list = query.trim().length >= 1 ? fuse.search(query.trim()).map((r) => r.item) : enriched;
-    const sorted = [...list].sort((a, b) => {
+    return [...list].sort((a, b) => {
       if (sort === "best") return b.compat.score - a.compat.score;
       return a.restaurant.name.localeCompare(b.restaurant.name);
     });
-    return sorted;
   }, [query, fuse, enriched, sort]);
 
-  const handleSelect = (r: Restaurant) => {
-    toast({
-      title: r.name,
-      description: "Restaurant selection will link to event creation soon.",
+  const startCreateEvent = (r: Restaurant) => {
+    setEventPrefill({
+      name: `Dinner at ${r.name}`,
+      location: `${r.name}, ${r.neighborhood}`,
+      description: `${r.cuisine} · ${r.neighborhood}`,
     });
+    setSelected(null);
+    toast({ title: "Event prefilled", description: `Finish creating your event for ${r.name}.` });
   };
 
   return (
@@ -85,6 +96,40 @@ const DineOutScreen = () => {
         <p className="font-body text-sm text-muted-foreground mt-1">
           Find restaurants that fit your dietary needs.
         </p>
+      </div>
+
+      {/* Restriction filter chips */}
+      <div className="px-4 mt-3">
+        <div className="flex items-center gap-2 mb-2">
+          <SlidersHorizontal className="h-3.5 w-3.5 text-muted-foreground" />
+          <p className="font-body text-xs font-medium text-muted-foreground">Screen for</p>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {FILTERABLE_RESTRICTIONS.map((r) => {
+            const active = activeFilters.includes(r);
+            return (
+              <button
+                key={r}
+                onClick={() => toggleFilter(r)}
+                className={`px-3 py-1.5 rounded-full font-body text-xs font-medium border transition-all active:scale-95 ${
+                  active
+                    ? "bg-primary text-primary-foreground border-primary shadow-sm"
+                    : "bg-primary-foreground text-foreground border-border hover:border-primary/40"
+                }`}
+              >
+                {r}
+              </button>
+            );
+          })}
+          {activeFilters.length > 0 && (
+            <button
+              onClick={() => setActiveFilters([])}
+              className="px-3 py-1.5 rounded-full font-body text-xs font-medium text-muted-foreground hover:text-foreground flex items-center gap-1"
+            >
+              <X className="h-3 w-3" /> Clear
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Map */}
@@ -109,7 +154,7 @@ const DineOutScreen = () => {
                     Match: <span className={`font-medium ${tierText[compat.tierColor]}`}>{compat.score}%</span>
                   </p>
                   <button
-                    onClick={() => handleSelect(r)}
+                    onClick={() => setSelected(r)}
                     className="mt-2 px-2 py-1 rounded-md bg-primary text-primary-foreground text-xs font-medium"
                   >
                     Select
@@ -144,9 +189,10 @@ const DineOutScreen = () => {
       {/* List */}
       <div className="px-4 mt-3 space-y-2">
         {filtered.map(({ restaurant: r, compat }) => (
-          <div
+          <button
             key={r.id}
-            className="bg-primary-foreground rounded-2xl shadow-warm p-3 flex gap-3 items-center"
+            onClick={() => setSelected(r)}
+            className="w-full text-left bg-primary-foreground rounded-2xl shadow-warm p-3 flex gap-3 items-center active:scale-[0.98] transition-transform"
           >
             <img
               src={r.photoUrl}
@@ -175,12 +221,13 @@ const DineOutScreen = () => {
               href={`https://maps.google.com/?q=${encodeURIComponent(r.name + " Boston")}`}
               target="_blank"
               rel="noreferrer"
+              onClick={(e) => e.stopPropagation()}
               className="p-2 rounded-lg hover:bg-background text-muted-foreground"
               aria-label="Open in Google Maps"
             >
               <ExternalLink className="h-4 w-4" />
             </a>
-          </div>
+          </button>
         ))}
         {filtered.length === 0 && (
           <p className="text-center font-body text-sm text-muted-foreground py-8">
@@ -188,6 +235,52 @@ const DineOutScreen = () => {
           </p>
         )}
       </div>
+
+      {/* Selection action sheet */}
+      <Dialog open={!!selected} onOpenChange={(v) => !v && setSelected(null)}>
+        <DialogContent className="max-w-[400px] rounded-2xl bg-card p-0 gap-0 overflow-hidden">
+          {selected && (
+            <>
+              <img src={selected.photoUrl} alt={selected.name} className="w-full h-32 object-cover" />
+              <DialogHeader className="p-5 pb-2">
+                <DialogTitle className="font-display text-xl text-foreground">{selected.name}</DialogTitle>
+                <DialogDescription className="font-body text-sm text-muted-foreground">
+                  {selected.cuisine} · {selected.neighborhood}
+                </DialogDescription>
+              </DialogHeader>
+              <div className="px-5 pb-5 space-y-3">
+                <div className="flex gap-2 text-xs font-body text-muted-foreground">
+                  <span className="px-2 py-1 rounded-full bg-muted">GF {selected.gfPct}%</span>
+                  <span className="px-2 py-1 rounded-full bg-muted">Vegan {selected.veganPct}%</span>
+                  <span className="px-2 py-1 rounded-full bg-muted">Veg {selected.vegPct}%</span>
+                </div>
+                <button
+                  onClick={() => startCreateEvent(selected)}
+                  className="w-full rounded-lg bg-primary text-primary-foreground px-4 py-3 text-sm font-body font-medium flex items-center justify-center gap-2 active:scale-95 transition-transform"
+                >
+                  <CalendarPlus className="h-4 w-4" />
+                  Create Event Here
+                </button>
+                <a
+                  href={`https://maps.google.com/?q=${encodeURIComponent(selected.name + " Boston")}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="w-full rounded-lg border border-border px-4 py-3 text-sm font-body font-medium flex items-center justify-center gap-2 active:scale-95 transition-transform"
+                >
+                  <ExternalLink className="h-4 w-4" />
+                  Open in Maps
+                </a>
+                <button
+                  onClick={() => setSelected(null)}
+                  className="w-full rounded-lg px-4 py-2 text-sm font-body text-muted-foreground hover:text-foreground"
+                >
+                  Cancel
+                </button>
+              </div>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
