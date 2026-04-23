@@ -29,13 +29,27 @@ const defaultForm: EventForm = {
 };
 
 const EventsScreen = ({ onSelectEvent }: { onSelectEvent: (id: string) => void }) => {
-  const { events, setEvents, user, friends } = useApp();
+  const { events, setEvents, user, friends, eventPrefill, setEventPrefill } = useApp();
   const { toast } = useToast();
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState<EventForm>(defaultForm);
   const [coHostOpen, setCoHostOpen] = useState(false);
   const [inviteOpen, setInviteOpen] = useState(false);
   const fileRef = useRef<HTMLInputElement>(null);
+
+  // Consume prefill from Dine Out → open dialog with restaurant data
+  useEffect(() => {
+    if (eventPrefill) {
+      setForm({
+        ...defaultForm,
+        name: eventPrefill.name || "",
+        location: eventPrefill.location || "",
+        description: eventPrefill.description || "",
+      });
+      setOpen(true);
+      setEventPrefill(null);
+    }
+  }, [eventPrefill, setEventPrefill]);
 
   const handleImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
