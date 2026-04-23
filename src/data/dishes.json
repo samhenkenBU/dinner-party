@@ -1,40 +1,1048 @@
 [
-  { "name": "Pasta Salad", "category": "pasta", "tags": [], "allergens": ["gluten", "dairy"], "variants": [{ "label": "Gluten-Free Pasta Salad", "removes": ["gluten"] }, { "label": "Dairy-Free Pasta Salad", "removes": ["dairy"] }] },
-  { "name": "Mac and Cheese", "category": "pasta", "tags": [], "allergens": ["gluten", "dairy", "eggs"], "variants": [{ "label": "Gluten-Free Mac and Cheese", "removes": ["gluten"] }] },
-  { "name": "Lasagna", "category": "pasta", "tags": [], "allergens": ["gluten", "dairy", "eggs"], "variants": [{ "label": "Gluten-Free Lasagna", "removes": ["gluten"] }] },
-  { "name": "Spaghetti and Meatballs", "category": "pasta", "tags": [], "allergens": ["gluten", "eggs"], "variants": [{ "label": "Gluten-Free Spaghetti and Meatballs", "removes": ["gluten"] }] },
-  { "name": "Fried Rice", "category": "grains", "tags": [], "allergens": ["soy", "eggs"], "variants": [{ "label": "Egg-Free Fried Rice", "removes": ["eggs"] }] },
-  { "name": "Risotto", "category": "grains", "tags": [], "allergens": ["dairy"], "variants": [{ "label": "Dairy-Free Risotto", "removes": ["dairy"] }] },
-  { "name": "Quinoa Salad", "category": "grains", "tags": [], "allergens": [] },
-  { "name": "Caesar Salad", "category": "salad", "tags": [], "allergens": ["dairy", "eggs", "fish", "gluten"], "variants": [{ "label": "Vegan Caesar Salad", "removes": ["dairy", "eggs", "fish"] }] },
-  { "name": "Greek Salad", "category": "salad", "tags": [], "allergens": ["dairy"], "variants": [{ "label": "Dairy-Free Greek Salad", "removes": ["dairy"] }] },
-  { "name": "Coleslaw", "category": "salad", "tags": [], "allergens": ["eggs"], "variants": [{ "label": "Egg-Free Coleslaw", "removes": ["eggs"] }] },
-  { "name": "Garden Salad", "category": "salad", "tags": [], "allergens": [] },
-  { "name": "Fruit Salad", "category": "salad", "tags": [], "allergens": [] },
-  { "name": "Caprese Salad", "category": "salad", "tags": [], "allergens": ["dairy"], "variants": [{ "label": "Dairy-Free Caprese Salad", "removes": ["dairy"] }] },
-  { "name": "BBQ Chicken", "category": "protein", "tags": [], "allergens": ["soy"], "variants": [{ "label": "Soy-Free BBQ Chicken", "removes": ["soy"] }] },
-  { "name": "Grilled Chicken", "category": "protein", "tags": [], "allergens": [] },
-  { "name": "Pulled Pork", "category": "protein", "tags": [], "allergens": [] },
-  { "name": "Meatballs", "category": "protein", "tags": [], "allergens": ["gluten", "eggs", "dairy"], "variants": [{ "label": "Gluten-Free Meatballs", "removes": ["gluten"] }] },
-  { "name": "Deviled Eggs", "category": "protein", "tags": [], "allergens": ["eggs"] },
-  { "name": "Shrimp Cocktail", "category": "protein", "tags": [], "allergens": ["shellfish"] },
-  { "name": "Beef Tacos", "category": "protein", "tags": [], "allergens": ["gluten", "dairy"], "variants": [{ "label": "Gluten-Free Beef Tacos", "removes": ["gluten"] }, { "label": "Dairy-Free Beef Tacos", "removes": ["dairy"] }] },
-  { "name": "Turkey Meatloaf", "category": "protein", "tags": [], "allergens": ["gluten", "eggs"], "variants": [{ "label": "Gluten-Free Turkey Meatloaf", "removes": ["gluten"] }] },
-  { "name": "Hummus", "category": "dip", "tags": [], "allergens": ["sesame"], "variants": [{ "label": "Sesame-Free Hummus", "removes": ["sesame"] }] },
-  { "name": "Guacamole", "category": "dip", "tags": [], "allergens": [] },
-  { "name": "Spinach Artichoke Dip", "category": "dip", "tags": [], "allergens": ["dairy", "eggs"], "variants": [{ "label": "Dairy-Free Spinach Artichoke Dip", "removes": ["dairy", "eggs"] }] },
-  { "name": "Chips and Salsa", "category": "dip", "tags": [], "allergens": [] },
-  { "name": "Potato Salad", "category": "side", "tags": [], "allergens": ["eggs"], "variants": [{ "label": "Egg-Free Potato Salad", "removes": ["eggs"] }] },
-  { "name": "Roasted Vegetables", "category": "side", "tags": [], "allergens": [] },
-  { "name": "Corn on the Cob", "category": "side", "tags": [], "allergens": ["dairy"], "variants": [{ "label": "Dairy-Free Corn on the Cob", "removes": ["dairy"] }] },
-  { "name": "Garlic Bread", "category": "side", "tags": [], "allergens": ["gluten", "dairy"], "variants": [{ "label": "Gluten-Free Garlic Bread", "removes": ["gluten"] }] },
-  { "name": "Stuffed Mushrooms", "category": "side", "tags": [], "allergens": ["dairy", "gluten"], "variants": [{ "label": "Gluten-Free Stuffed Mushrooms", "removes": ["gluten"] }] },
-  { "name": "Chocolate Cake", "category": "dessert", "tags": [], "allergens": ["gluten", "dairy", "eggs", "tree nuts"], "variants": [{ "label": "Gluten-Free Chocolate Cake", "removes": ["gluten"] }, { "label": "Nut-Free Chocolate Cake", "removes": ["tree nuts"] }] },
-  { "name": "Brownies", "category": "dessert", "tags": [], "allergens": ["gluten", "dairy", "eggs"], "variants": [{ "label": "Gluten-Free Brownies", "removes": ["gluten"] }] },
-  { "name": "Cookies", "category": "dessert", "tags": [], "allergens": ["gluten", "dairy", "eggs", "tree nuts"], "variants": [{ "label": "Nut-Free Cookies", "removes": ["tree nuts"] }, { "label": "Gluten-Free Cookies", "removes": ["gluten"] }] },
-  { "name": "Cheesecake", "category": "dessert", "tags": [], "allergens": ["gluten", "dairy", "eggs"] },
-  { "name": "Apple Pie", "category": "dessert", "tags": [], "allergens": ["gluten", "dairy", "eggs"], "variants": [{ "label": "Gluten-Free Apple Pie", "removes": ["gluten"] }] },
-  { "name": "Banana Bread", "category": "dessert", "tags": [], "allergens": ["gluten", "dairy", "eggs", "tree nuts"], "variants": [{ "label": "Nut-Free Banana Bread", "removes": ["tree nuts"] }] },
-  { "name": "Rice Krispie Treats", "category": "dessert", "tags": [], "allergens": ["dairy"], "variants": [{ "label": "Dairy-Free Rice Krispie Treats", "removes": ["dairy"] }] },
-  { "name": "Flourless Chocolate Cake", "category": "dessert", "tags": [], "allergens": ["dairy", "eggs", "tree nuts"], "variants": [{ "label": "Nut-Free Flourless Chocolate Cake", "removes": ["tree nuts"] }] }
+  {
+    "name": "Pasta Salad",
+    "allergens": ["gluten", "dairy"],
+    "category": "grains",
+    "tags": ["cold", "potluck-classic"],
+    "variants": [
+      { "label": "Gluten-Free Pasta Salad", "removes": ["gluten"] },
+      { "label": "Dairy-Free Pasta Salad", "removes": ["dairy"] },
+      { "label": "Vegan Pasta Salad", "removes": ["dairy"] }
+    ]
+  },
+  {
+    "name": "Mac and Cheese",
+    "allergens": ["gluten", "dairy", "eggs"],
+    "category": "grains",
+    "tags": ["hot", "comfort", "potluck-classic"],
+    "variants": [
+      { "label": "Gluten-Free Mac and Cheese", "removes": ["gluten"] },
+      { "label": "Vegan Mac and Cheese", "removes": ["dairy", "eggs"] }
+    ]
+  },
+  {
+    "name": "Lasagna",
+    "allergens": ["gluten", "dairy", "eggs"],
+    "category": "grains",
+    "tags": ["hot", "comfort"],
+    "variants": [
+      { "label": "Gluten-Free Lasagna", "removes": ["gluten"] },
+      { "label": "Vegan Lasagna", "removes": ["dairy", "eggs"] }
+    ]
+  },
+  {
+    "name": "Spaghetti and Meatballs",
+    "allergens": ["gluten", "eggs"],
+    "category": "grains",
+    "tags": ["hot", "comfort"],
+    "variants": [
+      { "label": "Gluten-Free Spaghetti and Meatballs", "removes": ["gluten"] }
+    ]
+  },
+  {
+    "name": "Fried Rice",
+    "allergens": ["soy", "eggs"],
+    "category": "grains",
+    "tags": ["hot", "asian"],
+    "variants": [
+      { "label": "Vegan Fried Rice", "removes": ["eggs"] }
+    ]
+  },
+  {
+    "name": "Risotto",
+    "allergens": ["dairy"],
+    "category": "grains",
+    "tags": ["hot", "italian"],
+    "variants": [
+      { "label": "Dairy-Free Risotto", "removes": ["dairy"] },
+      { "label": "Vegan Risotto", "removes": ["dairy"] }
+    ]
+  },
+  {
+    "name": "Quinoa Salad",
+    "allergens": [],
+    "category": "grains",
+    "tags": ["cold", "healthy", "vegan", "gluten-free"]
+  },
+  {
+    "name": "Couscous Salad",
+    "allergens": ["gluten"],
+    "category": "grains",
+    "tags": ["cold", "mediterranean"],
+    "variants": []
+  },
+  {
+    "name": "Pesto Pasta",
+    "allergens": ["gluten", "dairy", "tree nuts"],
+    "category": "grains",
+    "tags": ["cold", "italian"],
+    "variants": [
+      { "label": "Gluten-Free Pesto Pasta", "removes": ["gluten"] },
+      { "label": "Nut-Free Pesto Pasta", "removes": ["tree nuts"] },
+      { "label": "Vegan Pesto Pasta", "removes": ["dairy"] }
+    ]
+  },
+  {
+    "name": "Baked Ziti",
+    "allergens": ["gluten", "dairy", "eggs"],
+    "category": "grains",
+    "tags": ["hot", "italian", "comfort"],
+    "variants": [
+      { "label": "Gluten-Free Baked Ziti", "removes": ["gluten"] }
+    ]
+  },
+  {
+    "name": "Rice Pilaf",
+    "allergens": [],
+    "category": "grains",
+    "tags": ["hot", "gluten-free"]
+  },
+  {
+    "name": "Farro Salad",
+    "allergens": ["gluten"],
+    "category": "grains",
+    "tags": ["cold", "healthy"]
+  },
+  {
+    "name": "Bibimbap",
+    "allergens": ["soy", "eggs", "sesame"],
+    "category": "grains",
+    "tags": ["hot", "korean"]
+  },
+  {
+    "name": "Paella",
+    "allergens": ["shellfish", "gluten"],
+    "category": "grains",
+    "tags": ["hot", "spanish"]
+  },
+  {
+    "name": "Caesar Salad",
+    "allergens": ["dairy", "eggs", "fish", "gluten"],
+    "category": "salad",
+    "tags": ["cold", "potluck-classic"],
+    "variants": [
+      { "label": "Vegan Caesar Salad", "removes": ["dairy", "eggs", "fish"] },
+      { "label": "Gluten-Free Caesar Salad", "removes": ["gluten"] }
+    ]
+  },
+  {
+    "name": "Greek Salad",
+    "allergens": ["dairy"],
+    "category": "salad",
+    "tags": ["cold", "mediterranean"],
+    "variants": [
+      { "label": "Vegan Greek Salad", "removes": ["dairy"] }
+    ]
+  },
+  {
+    "name": "Coleslaw",
+    "allergens": ["eggs"],
+    "category": "salad",
+    "tags": ["cold", "potluck-classic"],
+    "variants": [
+      { "label": "Vegan Coleslaw", "removes": ["eggs"] }
+    ]
+  },
+  {
+    "name": "Garden Salad",
+    "allergens": [],
+    "category": "salad",
+    "tags": ["cold", "vegan", "gluten-free", "potluck-classic"]
+  },
+  {
+    "name": "Fruit Salad",
+    "allergens": [],
+    "category": "salad",
+    "tags": ["cold", "vegan", "gluten-free", "potluck-classic"]
+  },
+  {
+    "name": "Caprese Salad",
+    "allergens": ["dairy"],
+    "category": "salad",
+    "tags": ["cold", "italian"],
+    "variants": [
+      { "label": "Vegan Caprese Salad", "removes": ["dairy"] }
+    ]
+  },
+  {
+    "name": "Watermelon Feta Salad",
+    "allergens": ["dairy"],
+    "category": "salad",
+    "tags": ["cold", "summer"],
+    "variants": [
+      { "label": "Vegan Watermelon Salad", "removes": ["dairy"] }
+    ]
+  },
+  {
+    "name": "Nicoise Salad",
+    "allergens": ["fish", "eggs"],
+    "category": "salad",
+    "tags": ["cold", "french"]
+  },
+  {
+    "name": "Waldorf Salad",
+    "allergens": ["tree nuts", "eggs", "dairy"],
+    "category": "salad",
+    "tags": ["cold"]
+  },
+  {
+    "name": "Tabbouleh",
+    "allergens": ["gluten"],
+    "category": "salad",
+    "tags": ["cold", "middle-eastern", "vegan"],
+    "variants": [
+      { "label": "Gluten-Free Tabbouleh", "removes": ["gluten"] }
+    ]
+  },
+  {
+    "name": "Kale Salad",
+    "allergens": [],
+    "category": "salad",
+    "tags": ["cold", "vegan", "gluten-free", "healthy"]
+  },
+  {
+    "name": "Cucumber Tomato Salad",
+    "allergens": [],
+    "category": "salad",
+    "tags": ["cold", "vegan", "gluten-free"]
+  },
+  {
+    "name": "Asian Slaw",
+    "allergens": ["soy", "sesame"],
+    "category": "salad",
+    "tags": ["cold", "asian"]
+  },
+  {
+    "name": "BBQ Chicken",
+    "allergens": ["soy"],
+    "category": "protein",
+    "tags": ["hot", "potluck-classic"],
+    "variants": [
+      { "label": "Soy-Free BBQ Chicken", "removes": ["soy"] }
+    ]
+  },
+  {
+    "name": "Grilled Chicken",
+    "allergens": [],
+    "category": "protein",
+    "tags": ["hot", "gluten-free", "potluck-classic"]
+  },
+  {
+    "name": "Pulled Pork",
+    "allergens": [],
+    "category": "protein",
+    "tags": ["hot", "gluten-free", "potluck-classic"]
+  },
+  {
+    "name": "Meatballs",
+    "allergens": ["gluten", "eggs", "dairy"],
+    "category": "protein",
+    "tags": ["hot", "italian"],
+    "variants": [
+      { "label": "Gluten-Free Meatballs", "removes": ["gluten"] }
+    ]
+  },
+  {
+    "name": "Deviled Eggs",
+    "allergens": ["eggs"],
+    "category": "protein",
+    "tags": ["cold", "potluck-classic"]
+  },
+  {
+    "name": "Shrimp Cocktail",
+    "allergens": ["shellfish"],
+    "category": "protein",
+    "tags": ["cold"]
+  },
+  {
+    "name": "Beef Tacos",
+    "allergens": ["gluten", "dairy"],
+    "category": "protein",
+    "tags": ["hot", "mexican"],
+    "variants": [
+      { "label": "Gluten-Free Beef Tacos", "removes": ["gluten"] },
+      { "label": "Dairy-Free Beef Tacos", "removes": ["dairy"] }
+    ]
+  },
+  {
+    "name": "Turkey Meatloaf",
+    "allergens": ["gluten", "eggs"],
+    "category": "protein",
+    "tags": ["hot", "comfort"],
+    "variants": [
+      { "label": "Gluten-Free Turkey Meatloaf", "removes": ["gluten"] }
+    ]
+  },
+  {
+    "name": "Baked Salmon",
+    "allergens": ["fish"],
+    "category": "protein",
+    "tags": ["hot", "gluten-free"]
+  },
+  {
+    "name": "Chicken Wings",
+    "allergens": ["gluten", "soy"],
+    "category": "protein",
+    "tags": ["hot", "potluck-classic"],
+    "variants": [
+      { "label": "Gluten-Free Chicken Wings", "removes": ["gluten"] }
+    ]
+  },
+  {
+    "name": "Lamb Chops",
+    "allergens": [],
+    "category": "protein",
+    "tags": ["hot", "gluten-free"]
+  },
+  {
+    "name": "Pork Ribs",
+    "allergens": ["soy"],
+    "category": "protein",
+    "tags": ["hot", "bbq"]
+  },
+  {
+    "name": "Fried Chicken",
+    "allergens": ["gluten", "eggs", "dairy"],
+    "category": "protein",
+    "tags": ["hot", "comfort", "potluck-classic"],
+    "variants": [
+      { "label": "Gluten-Free Fried Chicken", "removes": ["gluten"] }
+    ]
+  },
+  {
+    "name": "Teriyaki Chicken",
+    "allergens": ["soy", "gluten"],
+    "category": "protein",
+    "tags": ["hot", "asian"],
+    "variants": [
+      { "label": "Gluten-Free Teriyaki Chicken", "removes": ["gluten"] }
+    ]
+  },
+  {
+    "name": "Carnitas",
+    "allergens": [],
+    "category": "protein",
+    "tags": ["hot", "mexican", "gluten-free"]
+  },
+  {
+    "name": "Falafel",
+    "allergens": ["gluten", "sesame"],
+    "category": "protein",
+    "tags": ["hot", "middle-eastern", "vegan"],
+    "variants": [
+      { "label": "Gluten-Free Falafel", "removes": ["gluten"] }
+    ]
+  },
+  {
+    "name": "Lentil Soup",
+    "allergens": [],
+    "category": "protein",
+    "tags": ["hot", "vegan", "gluten-free"]
+  },
+  {
+    "name": "Black Bean Burgers",
+    "allergens": ["gluten", "eggs"],
+    "category": "protein",
+    "tags": ["hot", "vegetarian"],
+    "variants": [
+      { "label": "Gluten-Free Black Bean Burgers", "removes": ["gluten"] },
+      { "label": "Vegan Black Bean Burgers", "removes": ["eggs"] }
+    ]
+  },
+  {
+    "name": "Chili",
+    "allergens": [],
+    "category": "protein",
+    "tags": ["hot", "gluten-free", "potluck-classic"]
+  },
+  {
+    "name": "Beef Stew",
+    "allergens": ["gluten"],
+    "category": "protein",
+    "tags": ["hot", "comfort"],
+    "variants": [
+      { "label": "Gluten-Free Beef Stew", "removes": ["gluten"] }
+    ]
+  },
+  {
+    "name": "Chicken Tikka Masala",
+    "allergens": ["dairy"],
+    "category": "protein",
+    "tags": ["hot", "indian"],
+    "variants": [
+      { "label": "Dairy-Free Tikka Masala", "removes": ["dairy"] }
+    ]
+  },
+  {
+    "name": "Shrimp Scampi",
+    "allergens": ["shellfish", "gluten", "dairy"],
+    "category": "protein",
+    "tags": ["hot", "italian"]
+  },
+  {
+    "name": "Crab Cakes",
+    "allergens": ["shellfish", "gluten", "eggs"],
+    "category": "protein",
+    "tags": ["hot"]
+  },
+  {
+    "name": "Lobster Bisque",
+    "allergens": ["shellfish", "dairy", "gluten"],
+    "category": "protein",
+    "tags": ["hot"]
+  },
+  {
+    "name": "Hummus",
+    "allergens": ["sesame"],
+    "category": "dip",
+    "tags": ["cold", "vegan", "gluten-free", "potluck-classic"],
+    "variants": [
+      { "label": "Sesame-Free Hummus", "removes": ["sesame"] }
+    ]
+  },
+  {
+    "name": "Guacamole",
+    "allergens": [],
+    "category": "dip",
+    "tags": ["cold", "vegan", "gluten-free", "potluck-classic"]
+  },
+  {
+    "name": "Spinach Artichoke Dip",
+    "allergens": ["dairy", "eggs"],
+    "category": "dip",
+    "tags": ["hot", "potluck-classic"],
+    "variants": [
+      { "label": "Vegan Spinach Artichoke Dip", "removes": ["dairy", "eggs"] }
+    ]
+  },
+  {
+    "name": "Chips and Salsa",
+    "allergens": [],
+    "category": "dip",
+    "tags": ["cold", "vegan", "gluten-free", "potluck-classic"]
+  },
+  {
+    "name": "French Onion Dip",
+    "allergens": ["dairy"],
+    "category": "dip",
+    "tags": ["cold"],
+    "variants": [
+      { "label": "Dairy-Free Onion Dip", "removes": ["dairy"] }
+    ]
+  },
+  {
+    "name": "Tzatziki",
+    "allergens": ["dairy"],
+    "category": "dip",
+    "tags": ["cold", "greek"],
+    "variants": [
+      { "label": "Dairy-Free Tzatziki", "removes": ["dairy"] }
+    ]
+  },
+  {
+    "name": "Baba Ganoush",
+    "allergens": ["sesame"],
+    "category": "dip",
+    "tags": ["cold", "vegan", "gluten-free", "middle-eastern"]
+  },
+  {
+    "name": "Queso Dip",
+    "allergens": ["dairy"],
+    "category": "dip",
+    "tags": ["hot", "mexican"],
+    "variants": [
+      { "label": "Vegan Queso Dip", "removes": ["dairy"] }
+    ]
+  },
+  {
+    "name": "Seven Layer Dip",
+    "allergens": ["dairy"],
+    "category": "dip",
+    "tags": ["cold", "potluck-classic"],
+    "variants": [
+      { "label": "Dairy-Free Seven Layer Dip", "removes": ["dairy"] }
+    ]
+  },
+  {
+    "name": "Buffalo Chicken Dip",
+    "allergens": ["dairy", "gluten"],
+    "category": "dip",
+    "tags": ["hot", "potluck-classic"],
+    "variants": [
+      { "label": "Gluten-Free Buffalo Chicken Dip", "removes": ["gluten"] }
+    ]
+  },
+  {
+    "name": "White Bean Dip",
+    "allergens": [],
+    "category": "dip",
+    "tags": ["cold", "vegan", "gluten-free"]
+  },
+  {
+    "name": "Potato Salad",
+    "allergens": ["eggs"],
+    "category": "side",
+    "tags": ["cold", "potluck-classic"],
+    "variants": [
+      { "label": "Vegan Potato Salad", "removes": ["eggs"] }
+    ]
+  },
+  {
+    "name": "Roasted Vegetables",
+    "allergens": [],
+    "category": "side",
+    "tags": ["hot", "vegan", "gluten-free", "potluck-classic"]
+  },
+  {
+    "name": "Corn on the Cob",
+    "allergens": ["dairy"],
+    "category": "side",
+    "tags": ["hot", "gluten-free", "potluck-classic"],
+    "variants": [
+      { "label": "Dairy-Free Corn on the Cob", "removes": ["dairy"] }
+    ]
+  },
+  {
+    "name": "Garlic Bread",
+    "allergens": ["gluten", "dairy"],
+    "category": "side",
+    "tags": ["hot", "italian"],
+    "variants": [
+      { "label": "Gluten-Free Garlic Bread", "removes": ["gluten"] },
+      { "label": "Dairy-Free Garlic Bread", "removes": ["dairy"] }
+    ]
+  },
+  {
+    "name": "Stuffed Mushrooms",
+    "allergens": ["dairy", "gluten"],
+    "category": "side",
+    "tags": ["hot"],
+    "variants": [
+      { "label": "Gluten-Free Stuffed Mushrooms", "removes": ["gluten"] },
+      { "label": "Vegan Stuffed Mushrooms", "removes": ["dairy"] }
+    ]
+  },
+  {
+    "name": "Mashed Potatoes",
+    "allergens": ["dairy"],
+    "category": "side",
+    "tags": ["hot", "gluten-free", "comfort"],
+    "variants": [
+      { "label": "Dairy-Free Mashed Potatoes", "removes": ["dairy"] },
+      { "label": "Vegan Mashed Potatoes", "removes": ["dairy"] }
+    ]
+  },
+  {
+    "name": "Green Bean Casserole",
+    "allergens": ["gluten", "dairy"],
+    "category": "side",
+    "tags": ["hot", "comfort"],
+    "variants": [
+      { "label": "Gluten-Free Green Bean Casserole", "removes": ["gluten"] }
+    ]
+  },
+  {
+    "name": "Macaroni Salad",
+    "allergens": ["gluten", "eggs"],
+    "category": "side",
+    "tags": ["cold", "potluck-classic"],
+    "variants": [
+      { "label": "Gluten-Free Macaroni Salad", "removes": ["gluten"] }
+    ]
+  },
+  {
+    "name": "Baked Beans",
+    "allergens": ["soy"],
+    "category": "side",
+    "tags": ["hot", "gluten-free", "potluck-classic"]
+  },
+  {
+    "name": "Sweet Potato Casserole",
+    "allergens": ["dairy", "eggs", "tree nuts"],
+    "category": "side",
+    "tags": ["hot", "comfort"],
+    "variants": [
+      { "label": "Vegan Sweet Potato Casserole", "removes": ["dairy", "eggs"] },
+      { "label": "Nut-Free Sweet Potato Casserole", "removes": ["tree nuts"] }
+    ]
+  },
+  {
+    "name": "Cornbread",
+    "allergens": ["gluten", "dairy", "eggs"],
+    "category": "side",
+    "tags": ["hot", "comfort"],
+    "variants": [
+      { "label": "Gluten-Free Cornbread", "removes": ["gluten"] },
+      { "label": "Vegan Cornbread", "removes": ["dairy", "eggs"] }
+    ]
+  },
+  {
+    "name": "Dinner Rolls",
+    "allergens": ["gluten", "dairy", "eggs"],
+    "category": "side",
+    "tags": ["hot"],
+    "variants": [
+      { "label": "Gluten-Free Dinner Rolls", "removes": ["gluten"] }
+    ]
+  },
+  {
+    "name": "Roasted Potatoes",
+    "allergens": [],
+    "category": "side",
+    "tags": ["hot", "vegan", "gluten-free"]
+  },
+  {
+    "name": "Grilled Asparagus",
+    "allergens": [],
+    "category": "side",
+    "tags": ["hot", "vegan", "gluten-free"]
+  },
+  {
+    "name": "Sauteed Spinach",
+    "allergens": [],
+    "category": "side",
+    "tags": ["hot", "vegan", "gluten-free"]
+  },
+  {
+    "name": "Edamame",
+    "allergens": ["soy"],
+    "category": "side",
+    "tags": ["hot", "gluten-free", "vegan"]
+  },
+  {
+    "name": "Brussel Sprouts",
+    "allergens": [],
+    "category": "side",
+    "tags": ["hot", "vegan", "gluten-free"]
+  },
+  {
+    "name": "Cauliflower Rice",
+    "allergens": [],
+    "category": "side",
+    "tags": ["hot", "vegan", "gluten-free", "healthy"]
+  },
+  {
+    "name": "Street Corn (Elote)",
+    "allergens": ["dairy", "eggs"],
+    "category": "side",
+    "tags": ["hot", "mexican", "gluten-free"]
+  },
+  {
+    "name": "Stuffing",
+    "allergens": ["gluten", "dairy", "eggs"],
+    "category": "side",
+    "tags": ["hot", "comfort"],
+    "variants": [
+      { "label": "Gluten-Free Stuffing", "removes": ["gluten"] }
+    ]
+  },
+  {
+    "name": "Chocolate Cake",
+    "allergens": ["gluten", "dairy", "eggs", "tree nuts"],
+    "category": "dessert",
+    "tags": ["sweet", "potluck-classic"],
+    "variants": [
+      { "label": "Gluten-Free Chocolate Cake", "removes": ["gluten"] },
+      { "label": "Vegan Chocolate Cake", "removes": ["dairy", "eggs"] },
+      { "label": "Nut-Free Chocolate Cake", "removes": ["tree nuts"] }
+    ]
+  },
+  {
+    "name": "Brownies",
+    "allergens": ["gluten", "dairy", "eggs"],
+    "category": "dessert",
+    "tags": ["sweet", "potluck-classic"],
+    "variants": [
+      { "label": "Gluten-Free Brownies", "removes": ["gluten"] },
+      { "label": "Vegan Brownies", "removes": ["dairy", "eggs"] }
+    ]
+  },
+  {
+    "name": "Cookies",
+    "allergens": ["gluten", "dairy", "eggs", "tree nuts"],
+    "category": "dessert",
+    "tags": ["sweet", "potluck-classic"],
+    "variants": [
+      { "label": "Gluten-Free Cookies", "removes": ["gluten"] },
+      { "label": "Vegan Cookies", "removes": ["dairy", "eggs"] }
+    ]
+  },
+  {
+    "name": "Cheesecake",
+    "allergens": ["gluten", "dairy", "eggs"],
+    "category": "dessert",
+    "tags": ["sweet"],
+    "variants": [
+      { "label": "Gluten-Free Cheesecake", "removes": ["gluten"] },
+      { "label": "Vegan Cheesecake", "removes": ["dairy", "eggs"] }
+    ]
+  },
+  {
+    "name": "Apple Pie",
+    "allergens": ["gluten", "dairy", "eggs"],
+    "category": "dessert",
+    "tags": ["sweet", "comfort", "potluck-classic"],
+    "variants": [
+      { "label": "Gluten-Free Apple Pie", "removes": ["gluten"] },
+      { "label": "Vegan Apple Pie", "removes": ["dairy", "eggs"] }
+    ]
+  },
+  {
+    "name": "Banana Bread",
+    "allergens": ["gluten", "dairy", "eggs", "tree nuts"],
+    "category": "dessert",
+    "tags": ["sweet", "comfort"],
+    "variants": [
+      { "label": "Gluten-Free Banana Bread", "removes": ["gluten"] },
+      { "label": "Vegan Banana Bread", "removes": ["dairy", "eggs"] },
+      { "label": "Nut-Free Banana Bread", "removes": ["tree nuts"] }
+    ]
+  },
+  {
+    "name": "Rice Krispie Treats",
+    "allergens": ["dairy"],
+    "category": "dessert",
+    "tags": ["sweet", "potluck-classic"],
+    "variants": [
+      { "label": "Vegan Rice Krispie Treats", "removes": ["dairy"] }
+    ]
+  },
+  {
+    "name": "Flourless Chocolate Cake",
+    "allergens": ["dairy", "eggs", "tree nuts"],
+    "category": "dessert",
+    "tags": ["sweet", "gluten-free"],
+    "variants": [
+      { "label": "Nut-Free Flourless Chocolate Cake", "removes": ["tree nuts"] }
+    ]
+  },
+  {
+    "name": "Pumpkin Pie",
+    "allergens": ["gluten", "dairy", "eggs"],
+    "category": "dessert",
+    "tags": ["sweet", "comfort"],
+    "variants": [
+      { "label": "Gluten-Free Pumpkin Pie", "removes": ["gluten"] },
+      { "label": "Vegan Pumpkin Pie", "removes": ["dairy", "eggs"] }
+    ]
+  },
+  {
+    "name": "Tiramisu",
+    "allergens": ["dairy", "eggs", "gluten"],
+    "category": "dessert",
+    "tags": ["sweet", "italian"]
+  },
+  {
+    "name": "Churros",
+    "allergens": ["gluten", "eggs"],
+    "category": "dessert",
+    "tags": ["sweet", "mexican"]
+  },
+  {
+    "name": "Macarons",
+    "allergens": ["eggs", "dairy", "tree nuts"],
+    "category": "dessert",
+    "tags": ["sweet", "french"]
+  },
+  {
+    "name": "Chocolate Truffles",
+    "allergens": ["dairy", "tree nuts"],
+    "category": "dessert",
+    "tags": ["sweet"],
+    "variants": [
+      { "label": "Vegan Chocolate Truffles", "removes": ["dairy"] },
+      { "label": "Nut-Free Chocolate Truffles", "removes": ["tree nuts"] }
+    ]
+  },
+  {
+    "name": "Lemon Bars",
+    "allergens": ["gluten", "dairy", "eggs"],
+    "category": "dessert",
+    "tags": ["sweet"],
+    "variants": [
+      { "label": "Gluten-Free Lemon Bars", "removes": ["gluten"] }
+    ]
+  },
+  {
+    "name": "Sorbet",
+    "allergens": [],
+    "category": "dessert",
+    "tags": ["sweet", "vegan", "gluten-free"]
+  },
+  {
+    "name": "Fruit Tart",
+    "allergens": ["gluten", "dairy", "eggs"],
+    "category": "dessert",
+    "tags": ["sweet"],
+    "variants": [
+      { "label": "Gluten-Free Fruit Tart", "removes": ["gluten"] }
+    ]
+  },
+  {
+    "name": "Pavlova",
+    "allergens": ["eggs", "dairy"],
+    "category": "dessert",
+    "tags": ["sweet", "gluten-free"]
+  },
+  {
+    "name": "Peach Cobbler",
+    "allergens": ["gluten", "dairy", "eggs"],
+    "category": "dessert",
+    "tags": ["sweet", "comfort"],
+    "variants": [
+      { "label": "Gluten-Free Peach Cobbler", "removes": ["gluten"] },
+      { "label": "Vegan Peach Cobbler", "removes": ["dairy", "eggs"] }
+    ]
+  },
+  {
+    "name": "Creme Brulee",
+    "allergens": ["dairy", "eggs"],
+    "category": "dessert",
+    "tags": ["sweet", "french", "gluten-free"]
+  },
+  {
+    "name": "Mochi",
+    "allergens": [],
+    "category": "dessert",
+    "tags": ["sweet", "japanese", "gluten-free", "vegan"]
+  },
+  {
+    "name": "Date Balls",
+    "allergens": ["tree nuts"],
+    "category": "dessert",
+    "tags": ["sweet", "gluten-free", "vegan"],
+    "variants": [
+      { "label": "Nut-Free Date Balls", "removes": ["tree nuts"] }
+    ]
+  },
+  {
+    "name": "Cheese Board",
+    "allergens": ["dairy"],
+    "category": "appetizer",
+    "tags": ["cold"],
+    "variants": [
+      { "label": "Vegan Cheese Board", "removes": ["dairy"] }
+    ]
+  },
+  {
+    "name": "Bruschetta",
+    "allergens": ["gluten", "dairy"],
+    "category": "appetizer",
+    "tags": ["cold", "italian"],
+    "variants": [
+      { "label": "Gluten-Free Bruschetta", "removes": ["gluten"] }
+    ]
+  },
+  {
+    "name": "Spring Rolls",
+    "allergens": ["gluten", "soy"],
+    "category": "appetizer",
+    "tags": ["hot", "asian"],
+    "variants": [
+      { "label": "Gluten-Free Spring Rolls", "removes": ["gluten"] }
+    ]
+  },
+  {
+    "name": "Dumplings",
+    "allergens": ["gluten", "soy", "eggs"],
+    "category": "appetizer",
+    "tags": ["hot", "asian"],
+    "variants": [
+      { "label": "Gluten-Free Dumplings", "removes": ["gluten"] }
+    ]
+  },
+  {
+    "name": "Spanakopita",
+    "allergens": ["gluten", "dairy", "eggs"],
+    "category": "appetizer",
+    "tags": ["hot", "greek"]
+  },
+  {
+    "name": "Pigs in a Blanket",
+    "allergens": ["gluten", "dairy", "eggs"],
+    "category": "appetizer",
+    "tags": ["hot", "potluck-classic"]
+  },
+  {
+    "name": "Stuffed Peppers",
+    "allergens": ["dairy"],
+    "category": "appetizer",
+    "tags": ["hot", "gluten-free"],
+    "variants": [
+      { "label": "Dairy-Free Stuffed Peppers", "removes": ["dairy"] },
+      { "label": "Vegan Stuffed Peppers", "removes": ["dairy"] }
+    ]
+  },
+  {
+    "name": "Caprese Skewers",
+    "allergens": ["dairy"],
+    "category": "appetizer",
+    "tags": ["cold", "italian"],
+    "variants": [
+      { "label": "Vegan Caprese Skewers", "removes": ["dairy"] }
+    ]
+  },
+  {
+    "name": "Antipasto Platter",
+    "allergens": ["dairy", "gluten"],
+    "category": "appetizer",
+    "tags": ["cold", "italian"]
+  },
+  {
+    "name": "Pita and Veggies",
+    "allergens": ["gluten"],
+    "category": "appetizer",
+    "tags": ["cold", "vegan"],
+    "variants": [
+      { "label": "Gluten-Free Pita and Veggies", "removes": ["gluten"] }
+    ]
+  },
+  {
+    "name": "Veggie Platter",
+    "allergens": [],
+    "category": "appetizer",
+    "tags": ["cold", "vegan", "gluten-free", "potluck-classic"]
+  },
+  {
+    "name": "Chicken Satay",
+    "allergens": ["peanuts", "soy", "gluten"],
+    "category": "appetizer",
+    "tags": ["hot", "asian"]
+  },
+  {
+    "name": "Beef Sliders",
+    "allergens": ["gluten", "dairy", "eggs"],
+    "category": "appetizer",
+    "tags": ["hot", "potluck-classic"],
+    "variants": [
+      { "label": "Gluten-Free Beef Sliders", "removes": ["gluten"] }
+    ]
+  },
+  {
+    "name": "Mini Quiches",
+    "allergens": ["gluten", "dairy", "eggs"],
+    "category": "appetizer",
+    "tags": ["hot"],
+    "variants": [
+      { "label": "Gluten-Free Mini Quiches", "removes": ["gluten"] }
+    ]
+  },
+  {
+    "name": "Pad Thai",
+    "allergens": ["peanuts", "gluten", "soy", "eggs", "shellfish"],
+    "category": "grains",
+    "tags": ["hot", "thai"],
+    "variants": [
+      { "label": "Peanut-Free Pad Thai", "removes": ["peanuts"] },
+      { "label": "Vegan Pad Thai", "removes": ["eggs", "shellfish"] }
+    ]
+  },
+  {
+    "name": "Chicken Curry",
+    "allergens": ["dairy"],
+    "category": "protein",
+    "tags": ["hot", "indian", "gluten-free"],
+    "variants": [
+      { "label": "Dairy-Free Chicken Curry", "removes": ["dairy"] }
+    ]
+  },
+  {
+    "name": "Vegetable Curry",
+    "allergens": ["dairy"],
+    "category": "protein",
+    "tags": ["hot", "indian", "vegan", "gluten-free"],
+    "variants": [
+      { "label": "Vegan Vegetable Curry", "removes": ["dairy"] }
+    ]
+  },
+  {
+    "name": "Shakshuka",
+    "allergens": ["eggs"],
+    "category": "protein",
+    "tags": ["hot", "middle-eastern", "gluten-free"]
+  },
+  {
+    "name": "Tacos al Pastor",
+    "allergens": ["gluten"],
+    "category": "protein",
+    "tags": ["hot", "mexican"],
+    "variants": [
+      { "label": "Gluten-Free Tacos al Pastor", "removes": ["gluten"] }
+    ]
+  },
+  {
+    "name": "Enchiladas",
+    "allergens": ["gluten", "dairy"],
+    "category": "protein",
+    "tags": ["hot", "mexican"],
+    "variants": [
+      { "label": "Gluten-Free Enchiladas", "removes": ["gluten"] },
+      { "label": "Dairy-Free Enchiladas", "removes": ["dairy"] }
+    ]
+  },
+  {
+    "name": "Sushi Rolls",
+    "allergens": ["fish", "shellfish", "soy", "sesame"],
+    "category": "protein",
+    "tags": ["cold", "japanese"],
+    "variants": [
+      { "label": "Vegetarian Sushi Rolls", "removes": ["fish", "shellfish"] }
+    ]
+  },
+  {
+    "name": "Poke Bowl",
+    "allergens": ["fish", "soy", "sesame", "gluten"],
+    "category": "protein",
+    "tags": ["cold", "hawaiian"]
+  },
+  {
+    "name": "Tom Yum Soup",
+    "allergens": ["shellfish", "fish"],
+    "category": "protein",
+    "tags": ["hot", "thai", "gluten-free"]
+  },
+  {
+    "name": "Miso Soup",
+    "allergens": ["soy", "gluten"],
+    "category": "protein",
+    "tags": ["hot", "japanese"]
+  },
+  {
+    "name": "Peanut Noodles",
+    "allergens": ["peanuts", "gluten", "soy"],
+    "category": "grains",
+    "tags": ["cold", "asian"],
+    "variants": [
+      { "label": "Gluten-Free Peanut Noodles", "removes": ["gluten"] }
+    ]
+  },
+  {
+    "name": "Baklava",
+    "allergens": ["gluten", "tree nuts", "dairy"],
+    "category": "dessert",
+    "tags": ["sweet", "middle-eastern"]
+  },
+  {
+    "name": "Tres Leches Cake",
+    "allergens": ["gluten", "dairy", "eggs"],
+    "category": "dessert",
+    "tags": ["sweet", "mexican"]
+  },
+  {
+    "name": "Cannoli",
+    "allergens": ["gluten", "dairy", "eggs", "tree nuts"],
+    "category": "dessert",
+    "tags": ["sweet", "italian"]
+  },
+  {
+    "name": "Carrot Cake",
+    "allergens": ["gluten", "dairy", "eggs", "tree nuts"],
+    "category": "dessert",
+    "tags": ["sweet", "comfort"],
+    "variants": [
+      { "label": "Gluten-Free Carrot Cake", "removes": ["gluten"] },
+      { "label": "Nut-Free Carrot Cake", "removes": ["tree nuts"] },
+      { "label": "Vegan Carrot Cake", "removes": ["dairy", "eggs"] }
+    ]
+  }
 ]
