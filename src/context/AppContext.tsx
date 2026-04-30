@@ -77,6 +77,7 @@ const defaultFriends: Friend[] = [
   { id: "f6", name: "Casey Brooks", email: "casey@email.com", restrictions: [] },
   { id: "f7", name: "Avery Tanaka", email: "avery@email.com", restrictions: ["Dairy", "Tree Nuts"] },
   { id: "f8", name: "Jamie Okafor", email: "jamie@email.com", restrictions: ["Wheat", "Sesame"] },
+  { id: "f9", name: "Quinn Alvarez", email: "quinn@email.com", restrictions: ["Vegetarian"] },
 ];
 
 const defaultEvents: AppEvent[] = [
